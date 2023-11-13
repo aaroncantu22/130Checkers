@@ -3,11 +3,31 @@
 <head>
     <meta charset="UTF-8" />
     <title>Index Page</title>
+    <style>   
+        /*   
+        .signOut {
+            text-align:right ;
+        }
+        */
+
+    </style>
+
+    <script>
+
+    </script>
+
 </head>
 <body>
     <article>
-        <h1>Welcome to Checkers!!!</h1>
+        <header>
+            <h1>Welcome to Checkers!!!</h1>
+        </header>
     </article>
+
+    <div class = "signOut">
+        <!-- Sign Out Button-->
+        <button id = "signOut" type = "button">SIGN OUT</button>
+    </div>
 
     <section>
         <!-- select the option -->
@@ -54,16 +74,31 @@
         <div>
             <!-- select the color of board -->
             <label>Color of Board</label>
+            <!-- Just Example -->
             <select id = "colorBoard">
                 <option value = "BandW">Black and White</option>
                 <option value = "brown">Brown</option>
             </select>
         </div>
-
-            
-
-        </div>
+        <br>      
+        <form>
+            <!-- Start Button (go to game_Page.html)-->
+            <button id = "startGame" type = "button" onclick = "location.href = './game_Page.html'" >START GAME</button>
+        </form>
     </section>
+
+    <br><br>
+    <form>        
+        <!-- Help Button (go to help_Page.html)-->
+        <button id = "help" type = "button" onclick = "location.href = './help_Page.html'">HELP</button>
+        <!-- Contact Button (go to contact_Page.html)-->
+        <button id = "contact" type = "button" onclick = "location.href = './contact_Page.html'">CONTACT</button>
+        <!-- LeaderBoard Nutton (go to leaderboard.html)-->
+        <button id = "leaderboard" type = "button" onclick = "location.href = './leaderboard.html'">LEADERBOARD</button>        
+    </form>     
+    
+
+
 
     
 </body>
