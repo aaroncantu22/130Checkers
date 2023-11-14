@@ -12,10 +12,6 @@
 
     </style>
 
-    <script>
-
-    </script>
-
 </head>
 <body>
     <article>
@@ -83,7 +79,8 @@
         <br>      
         <form>
             <!-- Start Button (go to game_Page.html)-->
-            <button id = "startGame" type = "button" onclick = "location.href = './game_Page.html'" >START GAME</button>
+            <button id = "start" type = "button"  onclick =  "startGame()">START GAME</button>
+            <!-- onclick = "location.href = './game_Page.html'" -->
         </form>
     </section>
 
@@ -96,7 +93,49 @@
         <!-- LeaderBoard Nutton (go to leaderboard.html)-->
         <button id = "leaderboard" type = "button" onclick = "location.href = './leaderboard.html'">LEADERBOARD</button>        
     </form>     
+
     
+    <script>
+        function startGame(){
+            let sizeBoard = document.getElementById('sizeBoard').value;     // get the selected size of board
+            let data = [];      // create martrix for each square
+            let cells;          // get the size of board
+    
+            // check the size of board
+            switch(sizeBoard){
+                case '8x8':
+                    cells = 8;
+                    break;
+                case '10x10':
+                    cells = 10;
+                    break;
+            }
+
+            // create the board
+            let tbody = document.createElement('tbody');
+            for (let i = 0; i < cells; i++){
+                let tr = document.createElement('tr');
+                data[i] = [];
+                for (let j = 0; j < cells; j++) {
+                    let td = document.createElement('td');
+            
+                    // set the color of board
+                    if ((i+j)%2 == 0){
+                        td.id = "board_white";
+                    }
+                    else {
+                        td.id = "board_black";
+                    }
+
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            }
+
+            localStorage.setItem('data', tbody.outerHTML);  // set the table data of checkers board
+            location.href = './game_Page.html' ;    // go to game_Page.html
+        }
+    </script>
 
 
 
