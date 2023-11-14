@@ -2,33 +2,61 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Checkers</title>
+    <title>Game Page</title>
+    
     <style>
         /*Checker Board*/
-        #white_square{
+        table {
+            border-collapse: collapse;
+            border: 10px solid rgb(182, 182, 182);
+        }
+        td, tr {
+            border: solid black; /* Add this line to set the border for cells and rows */
+            width: 60px;
+            height: 60px;
+        }
+
+        #board_white{
             background-color: white;
         }
-        #black_square{
+        #board_black{
             background-color: black;
         }
-        /*Checker Pieces*/
+
+        #checkerBoard{
+            text-align: center;
+        }
+
+        /*Checker Pieces*/  
     </style>
+    
 </head>
 <body>
-    <section><!-- Checkerboard -->
-        <div id = "checkersBoard">
-            <div id = "white_square"></div>
-            <div id = "black_square"></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>        
+    <article>
+        <h1>Checkers</h1>
+    </article>
+
+    <!-- Checker board -->
+    <div>
+        <table id = "board"></table>
+    </div>    
+    <br>
+    <br>    
+    
+
+    <!--Checker Pieces-->
+    <section>
     </section>
-    <section><!--Checker Pieces-->
-    </section>
+
+
+    <!-- Go back to Home Page -->
+    <button id = "backPage" type = "button" onclick = "location.href = './index_Page.html'">GO BACK</button>
+
 </body>
 <script>
     //Board js
+    var tableData = localStorage.getItem('data');       // get the table date of checkers board
+    document.getElementById('board').innerHTML = tableData;
     //Piece js
 </script>
 </html>
