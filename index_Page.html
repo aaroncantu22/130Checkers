@@ -10,6 +10,11 @@
         }
         */
 
+        /* create indent before the color options of pieces */
+        #player1, #player2{
+            text-indent: 2em;
+        }
+
     </style>
 
 </head>
@@ -35,35 +40,25 @@
                 <option value = "1ply">1 Player</option>
                 <option value = "2ply">2 Players</option>
             </select>
+            <!-- After click the "OK" button, appear the options of pieces color -->
+            <button id = "ok" onclick = "generatePlayer()">OK</button>    
         </div>
+
         <br>
-        <div>
-            <!-- select the Color of Pieces -->
-            <!-- if 2 players, add one more choices -->
-            <label>Color of Pieces:</label>
-            <select id = "colorPieces">
-                <!-- Just Example -->
-                <option value = "red">Red</option>
-                <option value = "green">Green</option>
-                <option value = "blue">Blue</option>
-            </select>
-        </div>
+        <!-- select the Color of Pieces -->
+        <!-- add the option for player 1 -->
+        <div id = "player1"></div>
         <br>
+        <!-- add the option for player 2 -->
+        <div id = "player2"></div>
+        <br>
+
         <div>
             <!-- select the size of board -->
             <label>Size of Board:</label>
             <select id = "sizeBoard">
                 <option value = "8x8">8 x 8</option>
                 <option value = "10x10">10 x 10</option>
-            </select>
-        </div>
-        <br>
-        <div>
-            <!-- select the texture for board -->
-            <label>Texture of Board</label>
-            <select id = "textureBoard">
-                <option value = "marble">Marble</option>
-                <option value = "wood-grain">Wood-grain</option>
             </select>
         </div>
         <br>
@@ -96,6 +91,73 @@
 
     
     <script>
+        /* set the option for 1st player */
+        function showPlayer1(){
+            let label = document.createElement('label');
+                label.innerHTML = "Color of Pieces (Player 1):";     
+                let select = document.createElement('select');
+                select.id = "colorPieces_ply1";
+                // set the color option of pieces
+                let option1 = document.createElement('option');     // set the 1st option
+                option1.id = "red";
+                option1.innerHTML = "Red";
+                let option2 = document.createElement('option');     // set the 2nd option
+                option2.id = "blue";
+                option2.innerHTML = "Blue";
+                let option3 = document.createElement('option');     // set the 3rd option
+                option3.id = "green";
+                option3.innerHTML = "Green";
+                
+                // append the select and each option
+                select.appendChild(option1);
+                select.appendChild(option2);
+                select.appendChild(option3);
+                document.getElementById('player1').innerHTML = '';
+                document.getElementById('player1').appendChild(label);
+                document.getElementById('player1').appendChild(select);
+        }
+        
+        /* set the options for 2nd player */
+        function showPlayer2(){
+            let label = document.createElement('label');
+                label.innerHTML = "Color of Pieces (Player 2):"
+                let select = document.createElement('select');
+                select.id = "colorPieces_ply2";
+                // set the color option of pieces
+                let option1 = document.createElement('option');     // set the 1st option
+                option1.id = "red";
+                option1.innerHTML = "Red";
+                let option2 = document.createElement('option');     // set the 3rd option
+                option2.id = "blue";
+                option2.innerHTML = "Blue";
+                let option3 = document.createElement('option');     // set the 3rd option
+                option3.id = "green";
+                option3.innerHTML = "Green";
+                
+                // append the select and each option 
+                select.appendChild(option1);
+                select.appendChild(option2);
+                select.appendChild(option3);
+                document.getElementById('player2').innerHTML = '';
+                document.getElementById('player2').appendChild(label);
+                document.getElementById('player2').appendChild(select);
+        }
+
+        /* show up the options depending on the number of players*/
+        function generatePlayer(){
+            let numPlayer = document.getElementById('numPlayer').value; 
+            if (numPlayer === '2ply'){
+                // the case of 2 players
+                showPlayer1();
+                showPlayer2();
+            }
+            else {
+                // the case of 1 player
+                showPlayer1();
+            }
+        }
+
+        /* go to the game page after gathering necessary information for playing checkers */
         function startGame(){
             let sizeBoard = document.getElementById('sizeBoard').value;     // get the selected size of board
             let data = [];      // create martrix for each square
@@ -126,7 +188,6 @@
                     else {
                         td.id = "board_black";
                     }
-
                     tr.appendChild(td);
                 }
                 tbody.appendChild(tr);
