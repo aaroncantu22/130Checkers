@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Index Page</title>
+    <style>   
+        /*   
+        .signOut {
+            text-align:right ;
+        }
+        */
+
+    </style>
+</head>
+<body>
+    <article>
+        <header>
+            <h1>Welcome to Checkers!!!</h1>
+        </header>
+    </article>
+
+    <div class="signOut">
+        <!-- Sign Out Button-->
+        <button id="signOut" type="button">SIGN OUT</button>
+    </div>
+
+    <section>
+        <!-- select the option -->
+        <h2>Select the Option:</h2>
+        <div>
+            <!-- Number of Players -->
+            <label for="numPlayer">How many Players?:</label>
+            <select id="numPlayer">
+                <option value="1ply">1 Player</option>
+                <option value="2ply">2 Players</option>
+            </select>
+        </div>
+        <br>
+        <div>
+            <!-- select the Color of Pieces -->
+            <!-- if 2 players, add one more choices -->
+            <label for="colorPieces">Color of Pieces:</label>
+            <select id="colorPieces">
+                <!-- Just Example -->
+                <option value="red">Red</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+            </select>
+        </div>
+        <br>
+        <div>
+            <!-- select the size of board -->
+            <label for="sizeBoard">Size of Board:</label>
+            <select id="sizeBoard">
+                <option value="8x8">8 x 8</option>
+                <option value="10x10">10 x 10</option>
+            </select>
+        </div>
+        <br>
+        <div>
+            <!-- select the texture for board -->
+            <label for="textureBoard">Texture of Board</label>
+            <select id="textureBoard">
+                <option value="marble">Marble</option>
+                <option value="wood-grain">Wood-grain</option>
+            </select>
+        </div>
+        <br>
+        <div>
+            <!-- select the color of board -->
+            <label for="colorBoard">Color of Board</label>
+            <!-- Just Example -->
+            <select id="colorBoard">
+                <option value="BandW">Black and White</option>
+                <option value="brown">Brown</option>
+            </select>
+        </div>
+        <br>      
+        <form>
+            <!-- Start Button (go to game_Page.html)-->
+            <button id="start" type="button" onclick="startGame()">START GAME</button>
+            <!-- onclick = "location.href = './game_Page.html'" -->
+        </form>
+    </section>
+
+    <br><br>
+    <form>        
+        <!-- Help Button (go to help_Page.html)-->
+        <button id="help" type="button" onclick="location.href='./help_Page.html'">HELP</button>
+        <!-- Contact Button (go to contact_Page.html)-->
+        <button id="contact" type="button" onclick="location.href='./contact_Page.html'">CONTACT</button>
+        <!-- LeaderBoard Button (go to leaderboard.html)-->
+        <button id="leaderboard" type="button" onclick="location.href='./leaderboard.html'">LEADERBOARD</button>        
+    </form>     
+
+    <script>
+        function startGame() {
+            let sizeBoard = document.getElementById('sizeBoard').value; // get the selected size of the board
+            let data = []; // create matrix for each square
+            let cells; // get the size of the board
+
+            // check the size of the board
+            switch (sizeBoard) {
+                case '8x8':
+                    cells = 8;
+                    break;
+                case '10x10':
+                    cells = 10;
+                    break;
+                default:
+                    cells = 8; // default to 8x8 if size is not recognized
+                    break;
+            }
+
+            // create the board
+            let tbody = document.createElement('tbody');
+            for (let i = 0; i < cells; i++) {
+                let tr = document.createElement('tr');
+                data[i] = [];
+                for (let j = 0; j < cells; j++) {
+                    let td = document.createElement('td');
+
+                    // set the color of board
+                    if ((i + j) % 2 == 0) {
+                        td.id = "board_white";
+                    } else {
+                        td.id = "board_black";
+                    }
+
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            }
+
+            localStorage.setItem('data', tbody.outerHTML); // set the table data of checkers board
+            localStorage.setItem('selectedSize', sizeBoard); // set the selected board size
+            location.href = './game_Page.html'; // go to game_Page.html
+        }
+    </script>
+</body>
+</html>
