@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Game Page</title>
+    
+    <style>
+        /* Checker Board */
+        table {
+            border-collapse: collapse;
+            border: 10px solid rgb(182, 182, 182);
+        }
+        td, tr {
+            border: solid black;
+            width: 60px;
+            height: 60px;
+        }
+
+        #board_white {
+            background-color: white;
+        }
+        #board_black {
+            background-color: black;
+        }
+
+        /* Checker Pieces */
+        .checker-piece {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <article>
+        <h1>Checkers</h1>
+    </article>
+
+    <!-- Checker board -->
+    <div>
+        <table id="board"></table>
+    </div>
+    <br>
+    <br>
+
+    <!-- Checker Pieces -->
+    <section id="checkerPieces"></section>
+
+    <!-- Go back to Home Page -->
+    <button id="backPage" type="button" onclick="location.href='./index_Page.html'">GO BACK</button>
+
+    <script>
+        // Board js
+        var tableData = localStorage.getItem('data');
+        document.getElementById('board').innerHTML = tableData;
+
+        // Checker Pieces js
+        function createCheckerPiece(color) {
+            var checkerPiece = document.createElement('div');
+            checkerPiece.className = 'checker-piece';
+            checkerPiece.style.backgroundColor = color;
+            return checkerPiece;
+        }
+
+        function placeCheckerPieces8x8() {
+            console.log('Placing pieces for 8x8 board.');
+            var checkerPiecesContainer = document.getElementById('checkerPieces');
+            var cells = document.querySelectorAll('td');
+            
+            cells.forEach(function (cell, index) {
+                var row = Math.floor(index / 8) + 1;
+                var col = index % 8 + 1;
+
+                // Only place pieces on dark squares in the outer rows
+                if ((row + col) % 2 !== 0 && (row <= 3 || row >= 6)) {
+                    var checkerPiece = createCheckerPiece('red'); // You can set the color as needed
+                    cell.appendChild(checkerPiece);
+                }
+            });
+        }
+
+        function placeCheckerPieces10x10() {
+            console.log('Placing pieces for 10x10 board.');
+            var checkerPiecesContainer = document.getElementById('checkerPieces');
+            var cells = document.querySelectorAll('td');
+            
+            cells.forEach(function (cell, index) {
+                var row = Math.floor(index / 10) + 1;
+                var col = index % 10 + 1;
+
+                // Only place pieces on dark squares in the outer rows
+                if ((row + col) % 2 !== 0 && (row <= 4 || row >= 7)) {
+                    var checkerPiece = createCheckerPiece('red'); // You can set the color as needed
+                    cell.appendChild(checkerPiece);
+                }
+            });
+        }
+
+        // Get the selected size of the board from localStorage
+        var selectedSize = localStorage.getItem('selectedSize');
+        console.log('Selected Size:', selectedSize);
+
+        // Set up the board based on the selected size
+        if (selectedSize === '8x8') {
+            placeCheckerPieces8x8();
+        } else if (selectedSize === '10x10') {
+            placeCheckerPieces10x10();
+        } else {
+            // Handle the case when no size is selected
+            console.error('No board size selected.');
+        }
+    </script>
+</body>
+</html>
