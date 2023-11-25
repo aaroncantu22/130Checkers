@@ -5,6 +5,27 @@
     <title>Contact Page</title>
     <!-- External CSS -->
     <link rel = "stylesheet" href = "checkers.css">
+    <style>
+        #Author {
+            display: flex;
+        }
+
+        #author1 {
+            flex-grow: 1;
+            margin-left: 15em;
+        }
+        #author2 {
+            flex-grow: 1;
+            margin-right: 15em;
+        }
+        ul {
+            text-align: left;
+        }
+        li {
+            margin-bottom: 1em;
+        }
+
+    </style>
 </head>
 <body>
     <!-- Fresno state logo and Title -->
@@ -13,16 +34,47 @@
         <img class = "bulldogs" id = "logo1" src = "bulldogs.jpg" alt = "Fresno State Bulldogs">
         <article>
             <header>
-                <h1>Contact</h1>
+                <h1>Contact Us</h1>
             </header>            
         </article>
         <img class = "bulldogs" id = "logo2"  src = "bulldogs.jpg" alt = "Fresno State Bulldogs">
     </div>
     <br>
-
+    <br>
     <!-- Go back to Home Page -->
     <!-- set CSS in "checkers.css" -->
     <button class = "backPage" type = "button" onclick = "location.href = './index_Page.html'">GO BACK</button>
+
+    <section>
+        <h2>Hello Players &#128516;</h2>
+        <br>
+        <p>Thank you for playing our games! </p>
+        <p>Please feel free contact us if you have anything. </p>
+        <br> <br> <br>
+        <div id = "Author">
+            <div id = "author1">
+                <h3>Aaron Cantu</h3>
+                <ul>
+                    <li> <b>Email:</b> <a href = "mailto: aaroncantu227316@mail.fresnostate.edu">aaroncantu227316@mail.fresnostate.edu</a> </li>
+                    <li> <b>Tel:</b> 559-xxx-xxxx</a> </li>
+                    <li> <b>Address:</b> xxxx x xxxxx Fresno, CA 93710</a> </li>
+                    <li> <b>Personal History:</b> Student at California State University, Fresno</li>
+                    <li><b>Major:</b> Computer Science Major</li>
+                </ul>
+            </div>
+            <div id = "author2">
+                <h3>Mayuka Nozaki</h3>
+                <ul>
+                    <li><b>Email:</b> <a href = "mailto: Noza3mayu3@mail.fresnostate.edu">Noza3mayu3@mail.fresnostate.edu</a> </li>
+                    <li> <b>Tel:</b> 559-xxx-xxxx</a> </li>
+                    <li> <b>Address:</b> xxxx x xxxxx Fresno, CA 93710</a> </li>
+                    <li><b>Personal History:</b> Student at California State University, Fresno</li>
+                    <li><b>Major:</b> Computer Science Major</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
     
 </body>
 </html>
