@@ -58,7 +58,8 @@
                 <option value = "2ply">2 Players</option>
             </select>
             <!-- After click the "OK" button, appear the options of pieces color -->
-            <button id = "ok" onclick = "generatePlayer()">OK</button>    
+            <button id = "ok" onclick = "generatePlayer()">OK</button> 
+            <p>(click "OK" button after choosing the number of players)</p>   
         </div>
 
         <br>
@@ -206,17 +207,7 @@
             
                     // set the color of board
                     if ((i+j)%2 == 0){
-                        td.id = "board_color1";
-                        if (colorBoard == 'board_wood'){
-                            td.style.backgroundImage = "url('darkbrown_board.jpg')";
-                        }
-                        else{
-                            td.style.backgroundColor = "rgb(76, 75, 75)";  // set the black to board
-                        }
-                    }
-                    else {
-                        td.id = "board_color2";
-                        // set the color of board depending on player's choice
+                        td.id = "board_color1"
                         switch (colorBoard) {
                             case 'board_white':
                                 td.style.backgroundColor = "white"; // set the black to board
@@ -242,12 +233,23 @@
 
                         }
                     }
+                    else {
+                        td.id = "board_color2";
+                        // set the color of board depending on player's choice
+                        if (colorBoard == 'board_wood'){
+                            td.style.backgroundImage = "url('darkbrown_board.jpg')";
+                        }
+                        else{
+                            td.style.backgroundColor = "rgb(76, 75, 75)";  // set the black to board
+                        }
+                    }
                     tr.appendChild(td);
                 }
                 tbody.appendChild(tr);
             }
 
             localStorage.setItem('data', tbody.outerHTML);  // set the table data of checkers board
+            localStorage.setItem('sizeBoard', sizeBoard);  // set the selected size of the board
             location.href = './game_Page.html' ;    // go to game_Page.html
         }
     </script>
