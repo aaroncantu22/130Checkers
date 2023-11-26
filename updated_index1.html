@@ -3,139 +3,248 @@
 <head>
     <meta charset="UTF-8" />
     <title>Index Page</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="checkers.css">
     <style>   
-        /*   
+         
         .signOut {
-            text-align:right ;
+            /* set the position of Sign Out button */
+            text-align: right;
+            margin-right: 20em;
         }
-        */
+        
+        #player1,
+        #player2 {
+            /* create indent before the color options of pieces */
+            text-indent: 2em;
+        }
 
     </style>
+
 </head>
 <body>
-    <article>
-        <header>
-            <h1>Welcome to Checkers!!!</h1>
-        </header>
-    </article>
+    <!-- Fresno state logo and Title -->
+    <!-- set CSS in "checkers.css" -->
+    <div id="logo">
+        <img class="bulldogs" id="logo1" src="bulldogs.jpg" alt="Fresno State Bulldogs">
+        <article>
+            <header>
+                <h1>Welcome to Checkers!!!</h1>
+            </header>            
+        </article>
+        <img class="bulldogs" id="logo2" src="bulldogs.jpg" alt="Fresno State Bulldogs">
+    </div>
+    <br>
 
     <div class="signOut">
         <!-- Sign Out Button-->
-        <button id="signOut" type="button">SIGN OUT</button>
+        <button id="signOut" type="button" onclick="location.href='./login_Page.html'">SIGN OUT</button>
     </div>
 
     <section>
         <!-- select the option -->
         <h2>Select the Option:</h2>
-        <div>
+        <div class="line_position">
             <!-- Number of Players -->
-            <label for="numPlayer">How many Players?:</label>
+            <label>How many Player?:</label>
             <select id="numPlayer">
                 <option value="1ply">1 Player</option>
                 <option value="2ply">2 Players</option>
             </select>
+            <!-- After click the "OK" button, appear the options of pieces color -->
+            <button id="ok" onclick="generatePlayer()">OK</button>    
         </div>
+
         <br>
-        <div>
-            <!-- select the Color of Pieces -->
-            <!-- if 2 players, add one more choices -->
-            <label for="colorPieces">Color of Pieces:</label>
-            <select id="colorPieces">
-                <!-- Just Example -->
-                <option value="red">Red</option>
-                <option value="green">Green</option>
-                <option value="blue">Blue</option>
-            </select>
-        </div>
+        <!-- select the Color of Pieces -->
+        <!-- add the option for player 1 -->
+        <div id="player1"></div>
         <br>
-        <div>
+        <!-- add the option for player 2 -->
+        <div id="player2"></div>
+        <br>
+
+        <div class="line_position">
             <!-- select the size of board -->
-            <label for="sizeBoard">Size of Board:</label>
+            <label>Size of Board:</label>
             <select id="sizeBoard">
                 <option value="8x8">8 x 8</option>
                 <option value="10x10">10 x 10</option>
             </select>
         </div>
         <br>
-        <div>
-            <!-- select the texture for board -->
-            <label for="textureBoard">Texture of Board</label>
-            <select id="textureBoard">
-                <option value="marble">Marble</option>
-                <option value="wood-grain">Wood-grain</option>
-            </select>
-        </div>
-        <br>
-        <div>
+        <div class="line_position">
             <!-- select the color of board -->
-            <label for="colorBoard">Color of Board</label>
-            <!-- Just Example -->
+            <label>Color of Board</label>
             <select id="colorBoard">
-                <option value="BandW">Black and White</option>
-                <option value="brown">Brown</option>
+                <!-- set the choices for the board color -->
+                <option value="board_white">Black and White</option>
+                <option value="board_pink">Black and Pink</option>                
+                <option value="board_blue">Black and Blue</option>
+                <option value="board_yellow">Black and Yellow</option>
+                <option value="board_green">Black and Green</option>
+                <option value="board_purple">Black and Purple</option>
+                <option value="board_wood">Wood</option>
             </select>
         </div>
         <br>      
         <form>
             <!-- Start Button (go to game_Page.html)-->
             <button id="start" type="button" onclick="startGame()">START GAME</button>
-            <!-- onclick = "location.href = './game_Page.html'" -->
+            <!-- onclick="location.href='./game_Page.html'" -->
         </form>
     </section>
 
     <br><br>
-    <form>        
+    <form>
         <!-- Help Button (go to help_Page.html)-->
         <button id="help" type="button" onclick="location.href='./help_Page.html'">HELP</button>
         <!-- Contact Button (go to contact_Page.html)-->
         <button id="contact" type="button" onclick="location.href='./contact_Page.html'">CONTACT</button>
-        <!-- LeaderBoard Button (go to leaderboard.html)-->
-        <button id="leaderboard" type="button" onclick="location.href='./leaderboard.html'">LEADERBOARD</button>        
+        <!-- LeaderBoard Nutton (go to leaderboard.html)-->
+        <button id="leaderboard" type="button" onclick="location.href='./leaderboard.html'">LEADERBOARD</button>
     </form>     
 
     <script>
-        function startGame() {
-            let sizeBoard = document.getElementById('sizeBoard').value; // get the selected size of the board
-            let data = []; // create matrix for each square
-            let cells; // get the size of the board
+        /* set the option for 1st player */
+        function showPlayer1(){
+            let label = document.createElement('label');
+            label.innerHTML = "Color of Pieces (Player 1):";     
+            let select = document.createElement('select');
+            select.id = "colorPieces_ply1";
+            // set the color option of pieces
+            let option1 = document.createElement('option');     // set the 1st option
+            option1.id = "red";
+            option1.innerHTML = "Red";
+            let option2 = document.createElement('option');     // set the 2nd option
+            option2.id = "blue";
+            option2.innerHTML = "Blue";
+            let option3 = document.createElement('option');     // set the 3rd option
+            option3.id = "green";
+            option3.innerHTML = "Green";
+            
+            // append the select and each option
+            select.appendChild(option1);
+            select.appendChild(option2);
+            select.appendChild(option3);
+            document.getElementById('player1').innerHTML = '';
+            document.getElementById('player1').appendChild(label);
+            document.getElementById('player1').appendChild(select);
+        }
+        
+        /* set the options for 2nd player */
+        function showPlayer2(){
+            let label = document.createElement('label');
+            label.innerHTML = "Color of Pieces (Player 2):"
+            let select = document.createElement('select');
+            select.id = "colorPieces_ply2";
+            // set the color option of pieces
+            let option1 = document.createElement('option');     // set the 1st option
+            option1.id = "red";
+            option1.innerHTML = "Red";
+            let option2 = document.createElement('option');     // set the 3rd option
+            option2.id = "blue";
+            option2.innerHTML = "Blue";
+            let option3 = document.createElement('option');     // set the 3rd option
+            option3.id = "green";
+            option3.innerHTML = "Green";
+            
+            // append the select and each option 
+            select.appendChild(option1);
+            select.appendChild(option2);
+            select.appendChild(option3);
+            document.getElementById('player2').innerHTML = '';
+            document.getElementById('player2').appendChild(label);
+            document.getElementById('player2').appendChild(select);
+        }
 
-            // check the size of the board
-            switch (sizeBoard) {
+        /* show up the options depending on the number of players*/
+        function generatePlayer(){
+            let numPlayer = document.getElementById('numPlayer').value; 
+            if (numPlayer === '2ply'){
+                // the case of 2 players
+                showPlayer1();
+                showPlayer2();
+            }
+            else {
+                // the case of 1 player
+                showPlayer1();
+            }
+        }
+
+        /* go to the game page after gathering necessary information for playing checkers */
+        function startGame(){
+            let sizeBoard = document.getElementById('sizeBoard').value;     // get the selected size of board
+            let colorBoard = document.getElementById('colorBoard').value;
+            let data = [];      // create martrix for each square
+            let cells;          // get the size of board
+    
+            // check the size of board
+            switch(sizeBoard){
                 case '8x8':
                     cells = 8;
                     break;
                 case '10x10':
                     cells = 10;
                     break;
-                default:
-                    cells = 8; // default to 8x8 if size is not recognized
-                    break;
             }
 
             // create the board
             let tbody = document.createElement('tbody');
-            for (let i = 0; i < cells; i++) {
+            for (let i = 0; i < cells; i++){
                 let tr = document.createElement('tr');
                 data[i] = [];
                 for (let j = 0; j < cells; j++) {
                     let td = document.createElement('td');
-
+            
                     // set the color of board
-                    if ((i + j) % 2 == 0) {
-                        td.id = "board_white";
-                    } else {
-                        td.id = "board_black";
+                    if ((i+j)%2 == 0){
+                        td.id = "board_color1";
+                        if (colorBoard == 'board_wood'){
+                            td.style.backgroundImage = "url('darkbrown_board.jpg')";
+                        }
+                        else{
+                            td.style.backgroundColor = "rgb(76, 75, 75)";  // set the black to board
+                        }
                     }
+                    else {
+                        td.id = "board_color2";
+                        // set the color of board depending on player's choice
+                        switch (colorBoard) {
+                            case 'board_white':
+                                td.style.backgroundColor = "white"; // set the black to board
+                                break;
+                            case 'board_pink':
+                                td.style.backgroundColor = "pink";  // set the black to board
+                                break;
+                            case 'board_blue':
+                                td.style.backgroundColor = "rgb(98, 179, 216)"; // set the blue to board
+                                break;
+                            case 'board_yellow':
+                                td.style.backgroundColor = "rgb(237, 232, 146)";    // set the yellow to board
+                                break;
+                            case 'board_green':
+                                td.style.backgroundColor = "rgb(146, 237, 175)";    // set the green to board
+                                break;
+                            case 'board_purple':
+                                td.style.backgroundColor = "rgb(192, 135, 228)";    // set the purple to board
+                                break;
+                            case 'board_wood':
+                                td.style.backgroundImage = "url('lightbrown_board.jpg')";    // set the purple to board
+                                break;
 
+                        }
+                    }
                     tr.appendChild(td);
                 }
                 tbody.appendChild(tr);
             }
 
-            localStorage.setItem('data', tbody.outerHTML); // set the table data of checkers board
-            localStorage.setItem('selectedSize', sizeBoard); // set the selected board size
-            location.href = './game_Page.html'; // go to game_Page.html
+            localStorage.setItem('data', tbody.outerHTML);  // set the table data of checkers board
+            localStorage.setItem('sizeBoard', sizeBoard);  // set the selected size of the board
+            location.href = './game_Page.html';    // go to game_Page.html
         }
     </script>
 </body>
 </html>
+
