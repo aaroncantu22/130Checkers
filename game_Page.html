@@ -41,7 +41,13 @@
         }
 
         
-        /*Checker Pieces*/  
+        /* Checker Pieces */
+        .checker-piece {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 5px;
+        } 
     </style>
     
 </head>
@@ -83,16 +89,13 @@
         <div>
             <table id = "board"></table>
         </div> 
+        <!-- Checker Pieces-->
+        <section id = "checkerPiece"></section>
     </div>
   
     <br>
     <br>    
     
-
-    <!--Checker Pieces-->
-    <section>
-    </section>
-
 
 
 </body>
@@ -100,7 +103,9 @@
     /* --- Board --- */
     var tableData = localStorage.getItem('data');       // get the table date of checkers board
     document.getElementById('board').innerHTML = tableData;
-    //Piece js
+
+    
+            
 
     /* --- timer --- */
     var startTime;
@@ -139,6 +144,77 @@
     function restartGame() {
         clearInterval(timerInterval);       // stop the timer
         document.getElementById("playTime").innerHTML = "00:00:00";     // reset the display
+    }
+
+    /* ---- Piece --- */
+    // create Checker Pieces
+    function createCheckerPiece(color) {
+        var checkerPiece = document.createElement('div');
+        checkerPiece.className = 'checker-piece';
+        checkerPiece.style.backgroundColor = color;
+        checkerPiece.style.border = '4px solid black'; // Add black border
+        return checkerPiece;
+    }
+
+    function placeCheckerPieces8x8() {
+        console.log('Placing pieces for 8x8 board.');
+        var checkerPiecesContainer = document.getElementById('checkerPieces');
+        var cells = document.querySelectorAll('td');
+
+        cells.forEach(function (cell, index) {
+            var row = Math.floor(index / 8) + 1;
+            var col = index % 8 + 1;
+
+            // Swap the positions of Player 1 (red) and Player 2 (blue) pieces
+            // Place Player 1 pieces on dark squares in the bottom rows
+            if ((row + col) % 2 !== 0 && (row >= 6)) {
+                var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply1'));
+                cell.appendChild(checkerPiece);
+            }
+
+            // Place Player 2 pieces on dark squares in the top rows
+            if ((row + col) % 2 !== 0 && (row <= 3)) {
+                var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply2'));
+                cell.appendChild(checkerPiece);
+            }
+        });
+    }
+
+    function placeCheckerPieces10x10() {
+        console.log('Placing pieces for 10x10 board.');
+        var checkerPiecesContainer = document.getElementById('checkerPieces');
+        var cells = document.querySelectorAll('td');
+
+        cells.forEach(function (cell, index) {
+            var row = Math.floor(index / 10) + 1;
+            var col = index % 10 + 1;
+
+            // Swap the positions of Player 1 (red) and Player 2 (blue) pieces
+            // Place Player 1 pieces on dark squares in the bottom rows
+            if ((row + col) % 2 !== 0 && (row >= 7)) {
+                var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply1'));
+                cell.appendChild(checkerPiece);
+            }
+
+            // Place Player 2 pieces on dark squares in the top rows
+            if ((row + col) % 2 !== 0 && (row <= 4)) {
+                var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply2'));
+                cell.appendChild(checkerPiece);
+            }
+        });
+    }
+
+    // Get the selected size of the board from Local Storage
+    var selectedSize = localStorage.getItem('sizeBoard');
+
+    // Set up the board based on the selected size
+    if (selectedSize === '8x8') {
+        placeCheckerPieces8x8();
+    } else if (selectedSize === '10x10') {
+        placeCheckerPieces10x10();
+    } else {
+        // Handle the case when no size is selected
+        console.error('No board size selected.');
     }
 </script>
 </html>
