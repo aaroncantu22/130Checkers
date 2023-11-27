@@ -130,11 +130,23 @@
                 let option3 = document.createElement('option');     // set the 3rd option
                 option3.id = "green";
                 option3.innerHTML = "Green";
-                
+                let option4 = document.createElement('option');     // set the 4th option
+                option4.id = "purple";
+                option4.innerHTML = "Purple";
+                let option5 = document.createElement('option');     // set the 5th option
+                option5.id = "yellow";
+                option5.innerHTML = "Yellow";
+                let option6 = document.createElement('option');     // set the 6th option
+                option6.id = "orange";
+                option6.innerHTML = "Orange";
+                    
                 // append the select and each option
                 select.appendChild(option1);
                 select.appendChild(option2);
                 select.appendChild(option3);
+                select.appendChild(option4);
+                select.appendChild(option5);
+                select.appendChild(option6);
                 document.getElementById('player1').innerHTML = '';
                 document.getElementById('player1').appendChild(label);
                 document.getElementById('player1').appendChild(select);
@@ -146,6 +158,18 @@
                 label.innerHTML = "Color of Pieces (Player 2):"
                 let select = document.createElement('select');
                 select.id = "colorPieces_ply2";
+
+                // Check the number of players selected
+                let numPlayer = document.getElementById('numPlayer').value;
+                let player2DefaultColor;
+
+                // Set default color for player 2 based on the number of players
+                if (numPlayer === '1ply') {
+                    player2DefaultColor = 'black'; // Default color for CPU in 1-player mode
+                } else {
+                    player2DefaultColor = 'blue';  // Default color for player 2 in 2-player mode
+                }
+
                 // set the color option of pieces
                 let option1 = document.createElement('option');     // set the 1st option
                 option1.id = "red";
@@ -156,11 +180,23 @@
                 let option3 = document.createElement('option');     // set the 3rd option
                 option3.id = "green";
                 option3.innerHTML = "Green";
+                let option4 = document.createElement('option');     // set the 4th option
+                option4.id = "green";
+                option4.innerHTML = "Green";
+                let option5 = document.createElement('option');     // set the 5th option
+                option5.id = "purple";
+                option5.innerHTML = "Purple";
+                let option6 = document.createElement('option');     // set the 6th option
+                option6.id = "yellow";
+                option6.innerHTML = "Yellow";
                 
                 // append the select and each option 
                 select.appendChild(option1);
                 select.appendChild(option2);
                 select.appendChild(option3);
+                select.appendChild(option4);
+                select.appendChild(option5);
+                select.appendChild(option6);
                 document.getElementById('player2').innerHTML = '';
                 document.getElementById('player2').appendChild(label);
                 document.getElementById('player2').appendChild(select);
@@ -197,6 +233,23 @@
                     break;
             }
 
+            // Fetch player one color from the selected options
+            let player1Color = document.getElementById('colorPieces_ply1').value;
+
+            // Fetch player two color if there are 2 players
+            let player2Color;
+            let numPlayer = document.getElementById('numPlayer').value;
+            if (numPlayer === '2ply') {
+                player2Color = document.getElementById('colorPieces_ply2').value;
+            } else {
+                // Default color for player 2 in 1-player mode
+                player2Color = 'black';
+            }
+
+            // Store player one and player two colors in Local Storage
+            localStorage.setItem('colorPieces_ply1', player1Color);
+            localStorage.setItem('colorPieces_ply2', player2Color);
+
             // create the board
             let tbody = document.createElement('tbody');
             for (let i = 0; i < cells; i++){
@@ -204,10 +257,9 @@
                 data[i] = [];
                 for (let j = 0; j < cells; j++) {
                     let td = document.createElement('td');
-            
                     // set the color of board
                     if ((i+j)%2 == 0){
-                        td.id = "board_color1"
+                        td.id = "board_color1";
                         switch (colorBoard) {
                             case 'board_white':
                                 td.style.backgroundColor = "white"; // set the black to board
@@ -242,8 +294,9 @@
                         else{
                             td.style.backgroundColor = "rgb(76, 75, 75)";  // set the black to board
                         }
-                    }
+                    }                    
                     tr.appendChild(td);
+                    
                 }
                 tbody.appendChild(tr);
             }
