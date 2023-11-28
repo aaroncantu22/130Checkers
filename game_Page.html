@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <title>Game Page</title>
     <!-- External CSS -->
-    <link rel = "stylesheet" href = "checkers.css">
+    <link rel="stylesheet" href="checkers.css">
     <style>
         /* --- Checker Board --- */
         table {
             border-collapse: collapse;
             border: 10px solid rgb(182, 182, 182);
-            margin: auto;   /* set the board at the center */
+            margin: auto; /* set the board at the center */
         }
 
         td, tr {
@@ -19,202 +19,247 @@
             height: 60px;
         }
 
-        #board_position{
+        #board_position {
             /* set the board on the center */
             display: flex;
             align-items: center;
             justify-content: center;
-            
+
         }
 
         /* --- Timer and Button --- */
-        #timer_position { 
-            /* set the position of timer and button */  
+        #timer_position {
+            /* set the position of timer and button */
             margin-left: -15em;
             margin-right: 5em;
             margin-bottom: 5em;
-        }        
-        
+        }
+
         #playTime {
             /* set the size of timer*/
             font-size: 30px;
         }
 
-        
         /* Checker Pieces */
         .checker-piece {
             width: 50px;
             height: 50px;
             border-radius: 50%;
             margin: 5px;
-        } 
+        }
     </style>
-    
+
 </head>
 <body>
-    <!-- Fresno state logo and Title -->
-    <!-- set CSS in "checkers.css" -->
-    <div id = "logo">
-        <img class = "bulldogs" id = "logo1" src = "bulldogs.jpg" alt = "Fresno State Bulldogs">
-        <article>
-            <header>
-                <h1>Checkers</h1>
-            </header>            
-        </article>
-        <img class = "bulldogs" id = "logo2"  src = "bulldogs.jpg" alt = "Fresno State Bulldogs">
-    </div>
+<!-- Fresno state logo and Title -->
+<!-- set CSS in "checkers.css" -->
+<div id="logo">
+    <img class="bulldogs" id="logo1" src="bulldogs.png" alt="Fresno State Bulldogs">
+    <article>
+        <header>
+            <h1>Checkers</h1>
+        </header>
+    </article>
+    <img class="bulldogs" id="logo2" src="bulldogs.png" alt="Fresno State Bulldogs">
+</div>
 
-    <br>
-    <!-- Go back to Home Page -->
-    <!-- set CSS in "checkers.css" -->
-    <button class = "backPage" type = "button" onclick = "location.href = './index_Page.html'">GO BACK</button>
-    <br>
-    <br>
+<br>
+<!-- Go back to Home Page -->
+<!-- set CSS in "checkers.css" -->
+<button class="backPage" type="button" onclick="location.href = './index_Page.html'">GO BACK</button>
+<br>
+<br>
 
-    <div id = "board_position">
-        <div id = "timer_position">
-            <div>
-                <!-- Start game and timer -->
-                <button id = "startGame" type = "button" onclick = "startGame()">Start Game</button>
-                <!-- Reset game and timer -->
-                <button id = "restartGame" type = "button" onclick = "restartGame()">Restart Game</button>
-            </div>
-            <br>
-            <!-- display time -->
-            <div id = "playTime">00:00:00</div>
-            <br> <br> <br>
-        </div>
-        <br> <br>
-        <!-- Checker board -->
+<div id="board_position">
+    <div id="timer_position">
         <div>
-            <table id = "board"></table>
-        </div> 
-        <!-- Checker Pieces-->
-        <section id = "checkerPiece"></section>
+            <!-- Start game and timer -->
+            <button id="startGame" type="button" onclick="startGame()">Start Game</button>
+            <!-- Reset game and timer -->
+            <button id="restartGame" type="button" onclick="restartGame()">Restart Game</button>
+        </div>
+        <br>
+        <!-- display time -->
+        <div id="playTime">00:00:00</div>
+        <br> <br> <br>
     </div>
-  
-    <br>
-    <br>    
-    
+    <br> <br>
+    <!-- Checker board -->
+    <div>
+        <table id="board"></table>
+    </div>
+    <!-- Checker Pieces-->
+    <section id="checkerPiece"></section>
+</div>
 
+<br>
+<br>
 
 </body>
 <script>
-    /* --- Board --- */
-    var tableData = localStorage.getItem('data');       // get the table date of checkers board
-    document.getElementById('board').innerHTML = tableData;
+    var selectedSize;
+    var highlightedPiece = null;
 
-    
-            
+    /* --- Board --- */
+    var tableData = localStorage.getItem('data');
+    document.getElementById('board').innerHTML = tableData;
 
     /* --- timer --- */
     var startTime;
     var timerInterval;
+    var gameStarted = false; // Add a flag variable to track game status
+    var hoverEnabled = true; // Flag to enable/disable hover color
+    
+   function startGame() {
+  if (!gameStarted) {
+    gameStarted = true;
 
-    /* start the timer after clicking "Start Game" Button */
-    function startGame() {
-        // stop the timer if it's already running 
-        if (timerInterval) {
-            clearInterval(timerInterval);
+    startTime = new Date();
+    timerInterval = setInterval(updateTimer, 1000);
+
+    setupPieceEventListeners();
+  }
+}
+
+function restartGame() {
+  clearInterval(timerInterval); // Stop the timer
+  document.getElementById('playTime').innerHTML = '00:00:00'; // Reset the timer display
+
+  // Reset the game started flag and disable hover event listeners
+  gameStarted = false;
+  removePieceEventListeners();
+}
+
+function removePieceEventListeners() {
+  var pieces = document.querySelectorAll('.checker-piece');
+
+  pieces.forEach(function (piece) {
+    piece.removeEventListener('mouseover', handlePieceMouseOver);
+    piece.removeEventListener('mouseout', handlePieceMouseOut);
+  });
+}
+
+function setupPieceEventListeners() {
+  var pieces = document.querySelectorAll('.checker-piece');
+
+  pieces.forEach(function (piece) {
+    // Check if the piece belongs to player 1 before adding the event listeners
+    if (piece.classList.contains('player1')) {
+      piece.addEventListener('mouseover', handlePieceMouseOver);
+      piece.addEventListener('mouseout', handlePieceMouseOut);
+    }
+  });
+}
+
+
+function handlePieceMouseOver(event) {
+  if (gameStarted) {
+    var piece = event.target;
+    piece.style.border = '4px solid green';
+  }
+}
+
+function handlePieceMouseOut(event) {
+  if (gameStarted) {
+    var piece = event.target;
+    piece.style.border = '4px solid black';
+  }
+}
+
+    function highlightAvailableMoves() {
+        // Reset the outline color for previously highlighted piece
+        if (highlightedPiece) {
+            highlightedPiece.style.border = '4px solid black';
+            highlightedPiece = null;
         }
-        startTime = new Date();     // record the start time        
-        timerInterval = setInterval(updateTimer, 1000);     // call updateTimer every 1 second
+
+        // No need to iterate over all cells, only handle the hovered piece
     }
 
     /* count Time */
     function updateTimer() {
-        var now = new Date();       // get the current time
-        var elapsedTime = now - startTime;      // calculate the elapsed time in milliseconds
+        var now = new Date();
+        var elapsedTime = now - startTime;
 
-        var hours = Math.floor(elapsedTime / 3600000);      // calculate hours
-        var minutes = Math.floor((elapsedTime % 3600000) / 60000);      // calculate minutes
-        var seconds = Math.floor((elapsedTime % 60000) / 1000);     // calculate seconds
+        var hours = Math.floor(elapsedTime / 3600000);
+        var minutes = Math.floor((elapsedTime % 3600000) / 60000);
+        var seconds = Math.floor((elapsedTime % 60000) / 1000);
 
-        // zero-padding for single-digit values
-        hours = hours < 10 ? "0" + hours : hours;
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
 
-        // display the formatted time
-        var timerDisplay = hours + ":" + minutes + ":" + seconds;
-        document.getElementById("playTime").innerHTML = timerDisplay;
-    }
-
-    /* reset the timer after clicking "Restart Game" Button */
-    function restartGame() {
-        clearInterval(timerInterval);       // stop the timer
-        document.getElementById("playTime").innerHTML = "00:00:00";     // reset the display
+        var timerDisplay = hours + ':' + minutes + ':' + seconds;
+        document.getElementById('playTime').innerHTML = timerDisplay;
     }
 
     /* ---- Piece --- */
     // create Checker Pieces
-    function createCheckerPiece(color) {
-        var checkerPiece = document.createElement('div');
-        checkerPiece.className = 'checker-piece';
-        checkerPiece.style.backgroundColor = color;
-        checkerPiece.style.border = '4px solid black'; // Add black border
-        return checkerPiece;
+    function createCheckerPiece(color, player) {
+  var checkerPiece = document.createElement('div');
+  checkerPiece.className = 'checker-piece ' + player; // Add player class
+  checkerPiece.style.backgroundColor = color;
+  checkerPiece.style.border = '4px solid black'; // Add black border
+  return checkerPiece;
+}
+
+
+function placeCheckerPieces8x8() {
+  console.log('Placing pieces for 8x8 board.');
+  var checkerPiecesContainer = document.getElementById('checkerPieces');
+  var cells = document.querySelectorAll('td');
+
+  cells.forEach(function (cell, index) {
+    var row = Math.floor(index / 8) + 1;
+    var col = index % 8 + 1;
+
+    if ((row + col) % 2 !== 0 && row >= 6) {
+      var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
+      cell.appendChild(checkerPiece);
     }
 
-    function placeCheckerPieces8x8() {
-        console.log('Placing pieces for 8x8 board.');
-        var checkerPiecesContainer = document.getElementById('checkerPieces');
-        var cells = document.querySelectorAll('td');
+    if ((row + col) % 2 !== 0 && row <= 3) {
+      var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2');
+      cell.appendChild(checkerPiece);
+    }
+  });
 
-        cells.forEach(function (cell, index) {
-            var row = Math.floor(index / 8) + 1;
-            var col = index % 8 + 1;
+  // Only add event listeners for player 1's pieces
+  setupPieceEventListeners();
+}
 
-            // Swap the positions of Player 1 (red) and Player 2 (blue) pieces
-            // Place Player 1 pieces on dark squares in the bottom rows
-            if ((row + col) % 2 !== 0 && (row >= 6)) {
-                var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply1'));
-                cell.appendChild(checkerPiece);
-            }
+function placeCheckerPieces10x10() {
+  console.log('Placing pieces for 10x10 board.');
+  var checkerPiecesContainer = document.getElementById('checkerPieces');
+  var cells = document.querySelectorAll('td');
 
-            // Place Player 2 pieces on dark squares in the top rows
-            if ((row + col) % 2 !== 0 && (row <= 3)) {
-                var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply2'));
-                cell.appendChild(checkerPiece);
-            }
-        });
+  cells.forEach(function (cell, index) {
+    var row = Math.floor(index / 10) + 1;
+    var col = index % 10 + 1;
+
+    if ((row + col) % 2 !== 0 && row >= 7) {
+      var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
+      cell.appendChild(checkerPiece);
     }
 
-    function placeCheckerPieces10x10() {
-        console.log('Placing pieces for 10x10 board.');
-        var checkerPiecesContainer = document.getElementById('checkerPieces');
-        var cells = document.querySelectorAll('td');
-
-        cells.forEach(function (cell, index) {
-            var row = Math.floor(index / 10) + 1;
-            var col = index % 10 + 1;
-
-            // Swap the positions of Player 1 (red) and Player 2 (blue) pieces
-            // Place Player 1 pieces on dark squares in the bottom rows
-            if ((row + col) % 2 !== 0 && (row >= 7)) {
-                var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply1'));
-                cell.appendChild(checkerPiece);
-            }
-
-            // Place Player 2 pieces on dark squares in the top rows
-            if ((row + col) % 2 !== 0 && (row <= 4)) {
-                var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply2'));
-                cell.appendChild(checkerPiece);
-            }
-        });
+    if ((row + col) % 2 !== 0 && row <= 4) {
+      var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2');
+      cell.appendChild(checkerPiece);
     }
+  });
 
-    // Get the selected size of the board from Local Storage
-    var selectedSize = localStorage.getItem('sizeBoard');
+  // Only add event listeners for player 1's pieces
+  setupPieceEventListeners();
+}
+    selectedSize = localStorage.getItem('sizeBoard');
 
-    // Set up the board based on the selected size
     if (selectedSize === '8x8') {
         placeCheckerPieces8x8();
     } else if (selectedSize === '10x10') {
         placeCheckerPieces10x10();
     } else {
-        // Handle the case when no size is selected
         console.error('No board size selected.');
     }
 </script>
+
 </html>
