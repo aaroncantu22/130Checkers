@@ -54,13 +54,13 @@
 <!-- Fresno state logo and Title -->
 <!-- set CSS in "checkers.css" -->
 <div id="logo">
-    <img class="bulldogs" id="logo1" src="bulldogs.png" alt="Fresno State Bulldogs">
+    <img class="bulldogs" id="logo1" src="bulldogs.jpg" alt="Fresno State Bulldogs">
     <article>
         <header>
             <h1>Checkers</h1>
         </header>
     </article>
-    <img class="bulldogs" id="logo2" src="bulldogs.png" alt="Fresno State Bulldogs">
+    <img class="bulldogs" id="logo2" src="bulldogs.jpg" alt="Fresno State Bulldogs">
 </div>
 
 <br>
@@ -109,72 +109,72 @@
     var timerInterval;
     var gameStarted = false; // Add a flag variable to track game status
     var hoverEnabled = true; // Flag to enable/disable hover color
-    
+    var currentPlayer = 'player1';  // initialize within startGame()
+
    function startGame() {
-  if (!gameStarted) {
-    gameStarted = true;
+        if (!gameStarted) {
+        gameStarted = true;
 
-    startTime = new Date();
-    timerInterval = setInterval(updateTimer, 1000);
+        startTime = new Date();
+        timerInterval = setInterval(updateTimer, 1000);
 
-    setupPieceEventListeners();
-  }
-}
+        currentPlayer = 'player1';
+        console.log("chceck2", currentPlayer);
 
-function restartGame() {
-  clearInterval(timerInterval); // Stop the timer
-  document.getElementById('playTime').innerHTML = '00:00:00'; // Reset the timer display
-
-  // Reset the game started flag and disable hover event listeners
-  gameStarted = false;
-  removePieceEventListeners();
-}
-
-function removePieceEventListeners() {
-  var pieces = document.querySelectorAll('.checker-piece');
-
-  pieces.forEach(function (piece) {
-    piece.removeEventListener('mouseover', handlePieceMouseOver);
-    piece.removeEventListener('mouseout', handlePieceMouseOut);
-  });
-}
-
-function setupPieceEventListeners() {
-  var pieces = document.querySelectorAll('.checker-piece');
-
-  pieces.forEach(function (piece) {
-    // Check if the piece belongs to player 1 before adding the event listeners
-    if (piece.classList.contains('player1')) {
-      piece.addEventListener('mouseover', handlePieceMouseOver);
-      piece.addEventListener('mouseout', handlePieceMouseOut);
-    }
-  });
-}
-
-
-function handlePieceMouseOver(event) {
-  if (gameStarted) {
-    var piece = event.target;
-    piece.style.border = '4px solid green';
-  }
-}
-
-function handlePieceMouseOut(event) {
-  if (gameStarted) {
-    var piece = event.target;
-    piece.style.border = '4px solid black';
-  }
-}
-
-    function highlightAvailableMoves() {
-        // Reset the outline color for previously highlighted piece
-        if (highlightedPiece) {
-            highlightedPiece.style.border = '4px solid black';
-            highlightedPiece = null;
+        //setupPieceEventListeners();
+        gamePlayStart();
         }
+    }   
 
-        // No need to iterate over all cells, only handle the hovered piece
+    function restartGame() {
+        clearInterval(timerInterval); // Stop the timer
+        document.getElementById('playTime').innerHTML = '00:00:00'; // Reset the timer display
+
+        // Reset the game started flag and disable hover event listeners
+        gameStarted = false;
+        //removePieceEventListeners();
     }
+
+    /*
+    function removePieceEventListeners() {
+        var pieces = document.querySelectorAll('.checker-piece');
+
+        pieces.forEach(function (piece) {
+            piece.removeEventListener('mouseover', handlePieceMouseOver);
+            piece.removeEventListener('mouseout', handlePieceMouseOut);
+        });
+    }
+    */
+
+    /*
+    function setupPieceEventListeners() {
+        var pieces = document.querySelectorAll('.checker-piece');
+
+        pieces.forEach(function (piece) {
+            // Check if the piece belongs to player 1 before adding the event listeners
+            if (piece.classList.contains('player1')) {
+                piece.addEventListener('mouseover', handlePieceMouseOver);
+                piece.addEventListener('mouseout', handlePieceMouseOut);
+            }
+        });
+    }
+    */
+
+    /*
+    function handlePieceMouseOver(event) {
+        if (gameStarted) {
+            var piece = event.target;
+            piece.style.border = '4px solid green';    
+        }
+    }
+
+    function handlePieceMouseOut(event) {
+        if (gameStarted) {
+            var piece = event.target;
+            piece.style.border = '4px solid black';
+        }
+    }
+    */
 
     /* count Time */
     function updateTimer() {
@@ -196,61 +196,68 @@ function handlePieceMouseOut(event) {
     /* ---- Piece --- */
     // create Checker Pieces
     function createCheckerPiece(color, player) {
-  var checkerPiece = document.createElement('div');
-  checkerPiece.className = 'checker-piece ' + player; // Add player class
-  checkerPiece.style.backgroundColor = color;
-  checkerPiece.style.border = '4px solid black'; // Add black border
-  return checkerPiece;
-}
-
-
-function placeCheckerPieces8x8() {
-  console.log('Placing pieces for 8x8 board.');
-  var checkerPiecesContainer = document.getElementById('checkerPieces');
-  var cells = document.querySelectorAll('td');
-
-  cells.forEach(function (cell, index) {
-    var row = Math.floor(index / 8) + 1;
-    var col = index % 8 + 1;
-
-    if ((row + col) % 2 !== 0 && row >= 6) {
-      var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
-      cell.appendChild(checkerPiece);
+        var checkerPiece = document.createElement('div');
+        checkerPiece.className = 'checker-piece ' + player; // Add player class
+        checkerPiece.style.backgroundColor = color;
+        checkerPiece.style.border = '4px solid black'; // Add black border
+        return checkerPiece;
     }
 
-    if ((row + col) % 2 !== 0 && row <= 3) {
-      var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2');
-      cell.appendChild(checkerPiece);
+        // set checkers pieces (8x8)
+        function placeCheckerPieces8x8() {
+            console.log('Placing pieces for 8x8 board.');
+            var checkerPiecesContainer = document.getElementById('checkerPieces');
+            var cells = document.querySelectorAll('td');
+
+            cells.forEach(function (cell, index) {
+                var row = Math.floor(index / 8) + 1;
+                var col = index % 8 + 1;
+
+                if ((row + col) % 2 !== 0 && row >= 6) {
+                var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
+                cell.appendChild(checkerPiece);
+                }
+
+                if ((row + col) % 2 !== 0 && row <= 3) {
+                var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2');
+                cell.appendChild(checkerPiece);
+                }
+            });
+
+        /*
+        // Only add event listeners for player 1's pieces
+        setupPieceEventListeners();
+        */
+        }
+
+    // set checkers pieces (10x10)
+    function placeCheckerPieces10x10() {
+        console.log('Placing pieces for 10x10 board.');
+        var checkerPiecesContainer = document.getElementById('checkerPieces');
+        var cells = document.querySelectorAll('td');
+
+        cells.forEach(function (cell, index) {
+            var row = Math.floor(index / 10) + 1;
+            var col = index % 10 + 1;
+
+            if ((row + col) % 2 !== 0 && row >= 7) {
+            var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
+            cell.appendChild(checkerPiece);
+            }
+
+            if ((row + col) % 2 !== 0 && row <= 4) {
+            var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2');
+            cell.appendChild(checkerPiece);
+            }
+        });
+
+
+        /*
+        // Only add event listeners for player 1's pieces
+        setupPieceEventListeners();
+        */
     }
-  });
 
-  // Only add event listeners for player 1's pieces
-  setupPieceEventListeners();
-}
-
-function placeCheckerPieces10x10() {
-  console.log('Placing pieces for 10x10 board.');
-  var checkerPiecesContainer = document.getElementById('checkerPieces');
-  var cells = document.querySelectorAll('td');
-
-  cells.forEach(function (cell, index) {
-    var row = Math.floor(index / 10) + 1;
-    var col = index % 10 + 1;
-
-    if ((row + col) % 2 !== 0 && row >= 7) {
-      var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
-      cell.appendChild(checkerPiece);
-    }
-
-    if ((row + col) % 2 !== 0 && row <= 4) {
-      var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2');
-      cell.appendChild(checkerPiece);
-    }
-  });
-
-  // Only add event listeners for player 1's pieces
-  setupPieceEventListeners();
-}
     selectedSize = localStorage.getItem('sizeBoard');
 
     if (selectedSize === '8x8') {
@@ -260,6 +267,322 @@ function placeCheckerPieces10x10() {
     } else {
         console.error('No board size selected.');
     }
+
+
+
+
+    /* Action of pieces */
+    //document.addEventListener('DOMContentLoaded', function () {
+        // ページが読み込まれたときに実行されるコード
+// function gamePlayStart(){
+
+        
+        // ピースにクリックイベントを追加
+        var pieces = document.querySelectorAll('.checker-piece');
+        var dataPieces = JSON.parse(localStorage.getItem('dataPieces'));
+        var dataColor = JSON.parse(localStorage.getItem('dataColor'));
+        var dataBoard = JSON.parse(localStorage.getItem('dataBoard'));
+        
+        pieces.forEach(function (piece) {
+            piece.addEventListener('click', handlePieceClick);
+        });
+                       
+
+        var cell
+        var rowNum;
+        var colNum;
+        var row_new;
+        var col_new;
+        var clickedPiece;
+        var selectedPiece = null;
+        var movCells;
+        
+        // ピースをクリックしたときの処理
+        function handlePieceClick(event) {
+            if (currentPlayer === 'player1') {
+            clickedPiece = event.target;
+
+            
+            console.log("chceck",clickedPiece.classList);
+            console.log("chceck", currentPlayer);
+
+                if (clickedPiece.classList.contains('player1')){
+                    movePieces();
+                }     
+            }   
+            else if (currentPlayer === 'player2')   {
+                clickedPiece = event.target;
+                if (clickedPiece.classList.contains('player2')){
+                    movePieces();
+                } 
+            }         
+        }          
+            
+
+        function movePieces(){
+            resetPiecesColors();
+                resetBoardColors();
+                clickedPiece.style.border = '4px solid white';
+                selectedPiece = clickedPiece;
+
+                cell = getContainingCell(clickedPiece);
+                rowNum = cell.parentElement.rowIndex; 
+                colNum = cell.cellIndex;
+                console.log('Row Number:', rowNum);
+                console.log('Column Number:', colNum);
+                
+                var tbodyInd = document.querySelector('tbody');
+                    
+                console.log('Row Number:', rowNum);
+                console.log('Column Number:', colNum);
+                console.log('data: ', dataBoard);
+                console.log('data2: ',tbodyInd);
+
+                movCells = getMovalableCells(tbodyInd, rowNum, colNum, clickedPiece.classList);
+                //getMovalableCells(tbodyInd, rowNum, colNum);
+
+                var allPieces = document.querySelectorAll('.checker-piece');
+                allPieces.forEach(function (piece) {
+                    if (piece !== clickedPiece) {
+                        piece.style.border = '4px solid black';
+                    }
+                });
+                //currentPlayer = (currentPlayer === 'player1') ? 'player2' : 'player1';
+                console.log("chceck", currentPlayer);
+        }
+        
+
+        var clickBoard = document.querySelectorAll('#board_color2');
+        console.log("c", clickBoard);
+        clickBoard.forEach(function (clickB){
+            clickB.addEventListener('click', boardClick);
+        });
+        
+
+        function boardClick(event){
+            var clilckedBoard = event.target;
+            console.log("hi", clilckedBoard);
+            cell = getContainingCell(clilckedBoard);
+            console.log('cel Number:', cell);   
+            row_new = cell.parentElement.rowIndex; 
+            col_new = cell.cellIndex;
+            console.log('Row Number2:', row_new, col_new);
+            console.log('Column Number2:', dataPieces[4][3]);
+                        
+            if (selectedPiece && isMoveAllowed(row_new,col_new) ){
+                //var createPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
+                var createPieces;
+                if (currentPlayer === 'player1') {
+                    createPieces = clilckedBoard.appendChild(selectedPiece);
+                    currentPlayer = 'player2';
+                } 
+                else if (currentPlayer === 'player2') {
+                    createPieces = clilckedBoard.appendChild(selectedPiece);
+                    // 4. currentPlayer を切り替える
+                    currentPlayer = 'player1';
+                }
+                clilckedBoard.appendChild(createPieces);
+                createPieces.addEventListener('click', handlePieceClick);
+                clickedPiece.style.border = "4px solid black";
+                update_dataPieces(rowNum, colNum, row_new, col_new, clickedPiece.classList); 
+                //resetPiecesColors();
+                resetBoardColors();
+                /*
+                if (isJumpRequired(rowNum, colNum, row_new, col_new)) {
+                    removeJumpedPiece(rowNum, colNum, row_new, col_new);
+                }
+                */
+                removeJumpedPiece(rowNum, colNum, row_new, col_new);
+                selectedPiece = null;
+                //currentPlayer = (currentPlayer === 'player1') ? 'player2' : 'player1';
+                
+            }
+            console.log("ply: ", currentPlayer);
+            
+            
+        }
+
+        /*
+        function isJumpRequired(rowStart, colStart, rowEnd, colEnd) {
+            // 移動先が敵の駒のセルで、その1つ手前が自分の駒である場合、飛び越える必要あり
+            var jumpedRow = (rowStart + rowEnd) / 2;
+            var jumpedCol = (colStart + colEnd) / 2;
+            return dataPieces[rowEnd][colEnd] === 0 && Math.abs(dataPieces[jumpedRow][jumpedCol]) === 1;
+        }
+        */
+
+
+
+        function removeJumpedPiece(rowStart, colStart, rowEnd, colEnd) {
+            // 飛び越えた駒の位置を計算
+            var jumpedRow = (rowStart + rowEnd) / 2;
+            var jumpedCol = (colStart + colEnd) / 2;
+
+            // 飛び越えた駒を含むセルを取得
+            var jumpedCell = document.querySelector('tbody').rows[jumpedRow].cells[jumpedCol];
+
+            // 飛び越えた駒を削除
+            jumpedCell.innerHTML = '';
+            dataPieces[jumpedRow][jumpedCol] = 0;
+        }
+
+        
+        
+        function isMoveAllowed(row_new,col_new){
+            for (var i = 0; i < movCells.length; i++) {
+                var move = movCells[i];
+                if (move[0] === row_new && move[1] === col_new) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function update_dataPieces(i, j, m, n, piecesTags){
+            if (piecesTags.contains('player1')){
+                dataPieces[i][j] = 0;
+                dataPieces[m][n] = 1;
+                console.log('dataPieces:', dataPieces);
+            }
+            else {
+                dataPieces[i][j] = 0;
+                dataPieces[m][n] = -1;
+                console.log('dataPieces:', dataPieces);
+            }           
+        }
+             
+
+        function resetPiecesColors() {
+            pieces.forEach(function (piece) {
+                piece.style.border = '4px solid black';
+            });
+        }
+
+        function resetBoardColors() {
+            var allCells = document.querySelectorAll('td');
+            //console.log("reset func: ", colNum);
+            allCells.forEach(function (cell, index) {
+                var row = Math.floor(index / dataColor.sizeCells);
+                var col = index % dataColor.sizeCells;
+                //console.log("reset func: ", dataColor, row, col, dataBoard);
+                // dataBoard の値に基づいてセルの背景色を設定
+                if (dataBoard[row][col] == 0) {
+                    cell.style.backgroundColor = dataColor.board_data1;
+                } else if (dataBoard[row][col] == 1) {
+                    cell.style.backgroundColor = dataColor.board_data2;
+                }
+                                  
+                });
+
+        }
+
+        function getContainingCell(piece) {
+            if (piece.tagName === 'TD') {
+                return piece;
+            }
+            return piece.parentElement;
+            
+        }     
+        
+        var rowInd;
+        var cellInd;
+        var movCells = [];
+
+        function getMovalableCells(tbodyInd, row, col, pieceTags){
+            var movCells = [];
+            var arrCells;
+            /*
+            let colorData = {
+                sizeCells: cells,
+                numPlayer: numPlayer,
+                board_data1: board_data1,
+                board_data2: board_data2,
+                piece_ply1: player2Color,
+                piece_ply2: player2Color
+            };
+            */
+            console.log("cell 1: " ,row);
+            console.log("cell 2: " ,col);
+
+            if (dataPieces[row][col] == -1) {
+                // player 2
+                
+                if (dataPieces[row+1][col+1] == 0){
+                    rowInd = tbodyInd.rows[row+1];
+                    cellInd = rowInd.cells[col+1];
+                    cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';  // get applicable "td"
+                    arrCells = [row+1,col+1];
+                    movCells.push(arrCells);
+                    console.log("cell: " ,movCells);
+                }  
+                if (row >= row+1 || 0 <= col-1){              
+                    if (dataPieces[row+1][col-1] == 0){
+                        rowInd = tbodyInd.rows[row+1];
+                        cellInd = rowInd.cells[col-1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+1,col-1];
+                        movCells.push(arrCells);
+                        console.log("cell: " ,movCells);
+                    }  
+                }             
+                if (dataPieces[row+1][col+1] == 1 && dataPieces[row+2][col+2] == 0){
+                    rowInd = tbodyInd.rows[row+2];
+                    cellInd = rowInd.cells[col+2];
+                    cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row+2,col+2];
+                    movCells.push(arrCells);
+                    console.log("cell: " ,movCells);
+                }
+                if (dataPieces[row+1][col-1] == 1 && dataPieces[row+2][col-2] == 0){
+                    rowInd = tbodyInd.rows[row+2];
+                    cellInd = rowInd.cells[col-2];
+                    cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row+2,col-2];
+                    movCells.push(arrCells);
+                    console.log("cell: " ,movCells);
+                }
+            }
+            else if (dataPieces[row][col] == 1) {
+                // player 1
+                if (dataPieces[row-1][col+1] == 0){
+                    console.log("Yes, No!");
+                    rowInd1 = tbodyInd.rows[row-1];
+                    cellInd1 = rowInd1.cells[col+1];
+                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row-1,col+1];
+                    movCells.push(arrCells);
+                    console.log("cell: " ,movCells);
+                    
+                }                
+                if (dataPieces[row-1][col-1] == 0){
+                    rowInd2 = tbodyInd.rows[row-1];
+                    cellInd2 = rowInd2.cells[col-1];
+                    cellInd2.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row-1,col-1];
+                    movCells.push(arrCells);
+                    console.log("cell: " ,movCells);
+                }
+                if (dataPieces[row-1][col+1] == -1 && dataPieces[row-2][col+2] == 0){
+                    rowInd1 = tbodyInd.rows[row-2];
+                    cellInd1 = rowInd1.cells[col+2];
+                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row-2,col+2];
+                    movCells.push(arrCells);
+                    console.log("cell: " ,movCells);
+                }
+                if(dataPieces[row-1][col-1] == -1 && dataPieces[row-2][col-2] == 0){
+                    rowInd1 = tbodyInd.rows[row-2];
+                    cellInd1 = rowInd1.cells[col-2];
+                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row-2,col-2];
+                    movCells.push(arrCells);
+                    console.log("cell: " ,movCells);
+                }
+            }
+            return movCells;            
+        }
+    //}
+
 </script>
 
 </html>
