@@ -300,12 +300,7 @@
         // ピースをクリックしたときの処理
         function handlePieceClick(event) {
             if (currentPlayer === 'player1') {
-            clickedPiece = event.target;
-
-            
-            console.log("chceck",clickedPiece.classList);
-            console.log("chceck", currentPlayer);
-
+                clickedPiece = event.target;
                 if (clickedPiece.classList.contains('player1')){
                     movePieces();
                 }     
@@ -328,16 +323,9 @@
                 cell = getContainingCell(clickedPiece);
                 rowNum = cell.parentElement.rowIndex; 
                 colNum = cell.cellIndex;
-                console.log('Row Number:', rowNum);
-                console.log('Column Number:', colNum);
                 
                 var tbodyInd = document.querySelector('tbody');
                     
-                console.log('Row Number:', rowNum);
-                console.log('Column Number:', colNum);
-                console.log('data: ', dataBoard);
-                console.log('data2: ',tbodyInd);
-
                 movCells = getMovalableCells(tbodyInd, rowNum, colNum, clickedPiece.classList);
                 //getMovalableCells(tbodyInd, rowNum, colNum);
 
@@ -348,12 +336,11 @@
                     }
                 });
                 //currentPlayer = (currentPlayer === 'player1') ? 'player2' : 'player1';
-                console.log("chceck", currentPlayer);
+
         }
         
 
         var clickBoard = document.querySelectorAll('#board_color2');
-        console.log("c", clickBoard);
         clickBoard.forEach(function (clickB){
             clickB.addEventListener('click', boardClick);
         });
@@ -361,55 +348,72 @@
 
         function boardClick(event){
             var clilckedBoard = event.target;
-            console.log("hi", clilckedBoard);
             cell = getContainingCell(clilckedBoard);
-            console.log('cel Number:', cell);   
             row_new = cell.parentElement.rowIndex; 
             col_new = cell.cellIndex;
-            console.log('Row Number2:', row_new, col_new);
-            console.log('Column Number2:', dataPieces[4][3]);
                         
             if (selectedPiece && isMoveAllowed(row_new,col_new) ){
                 //var createPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
                 var createPieces;
                 if (currentPlayer === 'player1') {
+                    
                     createPieces = clilckedBoard.appendChild(selectedPiece);
                     currentPlayer = 'player2';
+                    
+                   /*
+                    createPieces = document.createElement('div');
+                    createPieces.className = 'checker-piece player1';
+                    createPieces.style.backgroundColor = localStorage.getItem('colorPieces_ply1');
+                    createPieces.style.border = '4px solid black';
+                    currentPlayer = 'player2';
+                    */
                 } 
                 else if (currentPlayer === 'player2') {
+                    
                     createPieces = clilckedBoard.appendChild(selectedPiece);
                     // 4. currentPlayer を切り替える
                     currentPlayer = 'player1';
+                    
+                   /*
+                    createPieces = document.createElement('div');
+                    createPieces.className = 'checker-piece player2';
+                    createPieces.style.backgroundColor = localStorage.getItem('colorPieces_ply2');
+                    createPieces.style.border = '4px solid black';
+                    currentPlayer = 'player1';
+                    */
                 }
                 clilckedBoard.appendChild(createPieces);
                 createPieces.addEventListener('click', handlePieceClick);
                 clickedPiece.style.border = "4px solid black";
-                update_dataPieces(rowNum, colNum, row_new, col_new, clickedPiece.classList); 
-                //resetPiecesColors();
+                update_dataPieces(rowNum, colNum, row_new, col_new, clickedPiece.classList, createPieces); 
+                console.log ("num", row_new, col_new, createPieces);
                 resetBoardColors();
+                //resetPiecesColors();
                 /*
                 if (isJumpRequired(rowNum, colNum, row_new, col_new)) {
                     removeJumpedPiece(rowNum, colNum, row_new, col_new);
                 }
                 */
                 removeJumpedPiece(rowNum, colNum, row_new, col_new);
+                console.log("num: ", rowNum, colNum, row_new, col_new);
                 selectedPiece = null;
+                
+                
                 //currentPlayer = (currentPlayer === 'player1') ? 'player2' : 'player1';
                 
             }
-            console.log("ply: ", currentPlayer);
             
             
         }
 
-        /*
+        
         function isJumpRequired(rowStart, colStart, rowEnd, colEnd) {
             // 移動先が敵の駒のセルで、その1つ手前が自分の駒である場合、飛び越える必要あり
             var jumpedRow = (rowStart + rowEnd) / 2;
             var jumpedCol = (colStart + colEnd) / 2;
             return dataPieces[rowEnd][colEnd] === 0 && Math.abs(dataPieces[jumpedRow][jumpedCol]) === 1;
         }
-        */
+        
 
 
 
@@ -429,6 +433,7 @@
         
         
         function isMoveAllowed(row_new,col_new){
+            
             for (var i = 0; i < movCells.length; i++) {
                 var move = movCells[i];
                 if (move[0] === row_new && move[1] === col_new) {
@@ -436,19 +441,34 @@
                 }
             }
             return false;
+            
         }
 
-        function update_dataPieces(i, j, m, n, piecesTags){
+        function update_dataPieces(i, j, m, n, piecesTags, createPieces){
+            var totalNum = dataColor.sizeCells;
             if (piecesTags.contains('player1')){
                 dataPieces[i][j] = 0;
-                dataPieces[m][n] = 1;
-                console.log('dataPieces:', dataPieces);
+                if (m == 0){
+                    dataPieces[m][n] = 2;
+                    createPieces.classList.add('king');
+                }
+                else {
+                    dataPieces[m][n] = 1;
+                }
+                
+                console.log('dataPieces1:', dataPieces);
             }
             else {
                 dataPieces[i][j] = 0;
-                dataPieces[m][n] = -1;
+                if (m == totalNum-1){
+                    dataPieces[m][n] = -2;
+                    createPieces.classList.add('king');
+                }
+                else {
+                    dataPieces[m][n] = -1;
+                }
                 console.log('dataPieces:', dataPieces);
-            }           
+            } 
         }
              
 
@@ -482,7 +502,22 @@
             }
             return piece.parentElement;
             
-        }     
+        }    
+        
+        // kingに昇格する条件の確認
+        function checkPromotion(rowNum, currentPlayer, colNum) {
+            if ((currentPlayer === 'player1' && rowNum === dataColor.sizeCells - 1) ||
+                (currentPlayer === 'player2' && rowNum === 0)) {
+                promoteToKing(selectedPiece, currentPlayer, rowNum, colNum);
+            }
+        }
+
+        // kingに昇格する関数
+        function promoteToKing(piece,currentPlayer, row, col) {
+            piece.classList.add('king');
+            
+            
+        }
         
         var rowInd;
         var cellInd;
@@ -491,6 +526,7 @@
         function getMovalableCells(tbodyInd, row, col, pieceTags){
             var movCells = [];
             var arrCells;
+            var totalNum = dataColor.sizeCells;
             /*
             let colorData = {
                 sizeCells: cells,
@@ -503,55 +539,60 @@
             */
             console.log("cell 1: " ,row);
             console.log("cell 2: " ,col);
+            
+            console.log("cell 3: " ,dataColor.sizeCells);
 
             if (dataPieces[row][col] == -1) {
-                // player 2
-                
+                // player 2                
                 if (dataPieces[row+1][col+1] == 0){
                     rowInd = tbodyInd.rows[row+1];
                     cellInd = rowInd.cells[col+1];
                     cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';  // get applicable "td"
                     arrCells = [row+1,col+1];
                     movCells.push(arrCells);
-                    console.log("cell: " ,movCells);
                 }  
-                if (row >= row+1 || 0 <= col-1){              
-                    if (dataPieces[row+1][col-1] == 0){
-                        rowInd = tbodyInd.rows[row+1];
-                        cellInd = rowInd.cells[col-1];
-                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                        arrCells = [row+1,col-1];
-                        movCells.push(arrCells);
-                        console.log("cell: " ,movCells);
-                    }  
-                }             
-                if (dataPieces[row+1][col+1] == 1 && dataPieces[row+2][col+2] == 0){
+                              
+                if (dataPieces[row+1][col-1] == 0){
+                    rowInd = tbodyInd.rows[row+1];
+                    cellInd = rowInd.cells[col-1];
+                    cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row+1,col-1];                        
+                    movCells.push(arrCells);
+                }                               
+                if (totalNum > row+2 && dataPieces[row+1][col+1] == 1 && dataPieces[row+2][col+2] == 0){
                     rowInd = tbodyInd.rows[row+2];
                     cellInd = rowInd.cells[col+2];
                     cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
                     arrCells = [row+2,col+2];
                     movCells.push(arrCells);
-                    console.log("cell: " ,movCells);
+                    console.log("dataPieces",dataPieces);
+                    console.log("dataColor", dataColor);
                 }
-                if (dataPieces[row+1][col-1] == 1 && dataPieces[row+2][col-2] == 0){
+                if (totalNum > row+2 && dataPieces[row+1][col-1] == '1' && dataPieces[row+2][col-2] == 0){
                     rowInd = tbodyInd.rows[row+2];
                     cellInd = rowInd.cells[col-2];
                     cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
                     arrCells = [row+2,col-2];
                     movCells.push(arrCells);
-                    console.log("cell: " ,movCells);
+                    console.log("dataPieces",dataPieces);
+                    console.log("dataColor", dataColor);
                 }
+            
+                /*
+                if (row+1 == dataColor.sizeCells){
+                    // set to the king
+
+                }
+                */
             }
             else if (dataPieces[row][col] == 1) {
                 // player 1
                 if (dataPieces[row-1][col+1] == 0){
-                    console.log("Yes, No!");
                     rowInd1 = tbodyInd.rows[row-1];
                     cellInd1 = rowInd1.cells[col+1];
                     cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
                     arrCells = [row-1,col+1];
                     movCells.push(arrCells);
-                    console.log("cell: " ,movCells);
                     
                 }                
                 if (dataPieces[row-1][col-1] == 0){
@@ -560,25 +601,61 @@
                     cellInd2.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
                     arrCells = [row-1,col-1];
                     movCells.push(arrCells);
-                    console.log("cell: " ,movCells);
                 }
-                if (dataPieces[row-1][col+1] == -1 && dataPieces[row-2][col+2] == 0){
+                if (0 < row-2 && dataPieces[row-1][col+1] == -1 && dataPieces[row-2][col+2] == 0){
                     rowInd1 = tbodyInd.rows[row-2];
                     cellInd1 = rowInd1.cells[col+2];
                     cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
                     arrCells = [row-2,col+2];
                     movCells.push(arrCells);
-                    console.log("cell: " ,movCells);
                 }
-                if(dataPieces[row-1][col-1] == -1 && dataPieces[row-2][col-2] == 0){
+                if(0 < row-2 && dataPieces[row-1][col-1] == -1 && dataPieces[row-2][col-2] == 0){
                     rowInd1 = tbodyInd.rows[row-2];
                     cellInd1 = rowInd1.cells[col-2];
                     cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
                     arrCells = [row-2,col-2];
                     movCells.push(arrCells);
-                    console.log("cell: " ,movCells);
                 }
             }
+            else if (dataPieces[row][col] == -2) {
+                if (dataPieces[row-1][col+1] == 0){
+                    rowInd1 = tbodyInd.rows[row-1];
+                    cellInd1 = rowInd1.cells[col+1];
+                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row-1,col+1];
+                    movCells.push(arrCells);
+                    
+                }                
+                if (dataPieces[row-1][col-1] == 0){
+                    rowInd2 = tbodyInd.rows[row-1];
+                    cellInd2 = rowInd2.cells[col-1];
+                    cellInd2.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row-1,col-1];
+                    movCells.push(arrCells);
+                }
+                if (dataPieces[row+1][col+1] == 0){
+                    rowInd1 = tbodyInd.rows[row+1];
+                    cellInd1 = rowInd1.cells[col+1];
+                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row+1,col+1];
+                    movCells.push(arrCells);
+                    
+                }                
+                if (dataPieces[row+1][col-1] == 0){
+                    rowInd2 = tbodyInd.rows[row+1];
+                    cellInd2 = rowInd2.cells[col-1];
+                    cellInd2.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row+1,col-1];
+                    movCells.push(arrCells);
+                }
+            }
+            /*
+            else if (dataPieces[row][col] == 2) {
+            }
+            */
+            //checkPromotion(row, currentPlayer, col);
+            console.log("dataPieces",dataPieces);
+            console.log("dataColor", dataColor);
             return movCells;            
         }
     //}
