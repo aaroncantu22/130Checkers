@@ -11,26 +11,31 @@ What each member has done in the project:
     Aaron:
   
     Mayuka:
+  
 - Contact Page
   
     Aaron:
   
     Mayuka: add contact information
+  
 - Index Page
   
     Aaron:
   
     Mayuka: create the option for games
+  
 - Game Page
   
     Aaron: set pieces on the starting position
   
-    Mayuka: create a board, set the movement of pieces 
+    Mayuka: create a board, set the movement of pieces
+  
 - Help Page
   
     Aaron:
   
     Mayuka:
+  
 - Leaderboard Page
   
     Aaron:
