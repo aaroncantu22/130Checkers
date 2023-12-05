@@ -7,13 +7,19 @@ Group Members: Aaron Cantu and Mayuka Nozaki
 ------------
 What each member has done in the project:
 - Login Page
+  
     Aaron:
+  
     Mayuka:
 - Contact Page
-    Aaron: 
+  
+    Aaron:
+  
     Mayuka: add contact information
 - Index Page
+  
     Aaron:
+  
     Mayuka: create the option for games
 - Game Page
     Aaron: set pieces on the starting position
