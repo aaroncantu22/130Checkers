@@ -8,9 +8,7 @@ Group Members: Aaron Cantu and Mayuka Nozaki
 What each member has done in the project:
 - Login Page
   
-    Aaron:　
-  
-    Mayuka:
+    Aaron:　create Login / Signup page (HTML, CSS, JS, PHP)
   
 - Contact Page
   
