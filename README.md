@@ -8,13 +8,11 @@ Group Members: Aaron Cantu and Mayuka Nozaki
 What each member has done in the project:
 - Login Page
   
-    Aaron:
+    Aaron:　
   
     Mayuka:
   
 - Contact Page
-  
-    Aaron:
   
     Mayuka: add contact information
   
@@ -31,10 +29,8 @@ What each member has done in the project:
     Mayuka: create a board, set the movement of pieces
   
 - Help Page
-  
-    Aaron:
-  
-    Mayuka:
+
+    Mayuka: add instruction for checkers
   
 - Leaderboard Page
   
