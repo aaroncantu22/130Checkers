@@ -6,6 +6,19 @@
     <title>Help Page</title>
     <!-- External CSS -->
     <link rel = "stylesheet" href = "checkers.css">
+    <style>
+        .rule{
+            flex-grow: 1;
+            margin-left: 20em;
+        }
+        ul {
+            text-align: left;
+        }
+        li {
+            margin-bottom: 1em;
+        }
+
+    </style>
 </head>
 <body>
     <!-- Fresno state logo and Title -->
@@ -25,5 +38,56 @@
     <!-- set CSS in "checkers.css" -->
     <button class = "backPage" type = "button" onclick = "location.href = './index_Page.html'">GO BACK</button>
     
+    <section>
+        <h2>What is the checkers?</h2>
+        <div class = "rule">
+        <ul>
+            <li>
+                Place the pieces on every other dark square, creating a staggered pattern by rows as depicted on the board
+            </li>
+            <li>
+                Each player has pieces of a different color
+            </li>
+        </ul>
+        </div>
+    </section>
+    <br>
+    <section>
+        <h2>How to play checkers</h2>
+        <div class = "rule">
+        <ul>
+            <li>
+                Players can only move their pieces diagonally forward (towards their opponent)
+            </li>
+            <li>
+                Regular pieces can only move one square at a time diagonally
+            </li>
+            <li>
+                When a regular piece reaches the opponent's back row, it is "kinged" and gets a crown
+            </li>
+            <ul>
+                <li>Kings can move both forward and backward diagonally</li>
+            </ul>
+            <li>
+                Capture is mandatory when an opponent's piece is diagonally adjacent and there is an empty square immediately beyond it
+            </li>
+            <li>
+                The game ends when one player captures all of the opponent's pieces or blocks them from making a legal move
+            </li>
+            <li>Win condition</li>
+            <ul>
+                <li>
+                    Remove all your opponent's pieces from the board
+                </li>
+                <li>
+                    Stop your opponents from being able to move any of their pieces
+                </li>
+            </ul>
+        </ul>
+        </div>
+    </section>
+    
+    
+
 </body>
 </html>
