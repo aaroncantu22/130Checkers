@@ -1,0 +1,130 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #484343;
+    margin: 0;
+    position: relative;
+}
+
+
+.button_group {
+    margin-top: 30px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+.login_form_container {
+    position: relative;
+    text-align: center;
+    width: 400px;
+    height: 470px;
+    max-width: 400px;
+    max-height: 470px;
+    background: #ffffff;
+    border-radius: 50px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-top: 70px;
+}
+
+.login_form_container::before {
+    position: absolute;
+    width: 170%;
+    height: 170%;
+    content: '';
+    background-image: conic-gradient(transparent, transparent, transparent, rgb(255, 0, 0));
+    animation: rotate_border 6s linear infinite;
+}
+
+.login_form_container::after {
+    position: absolute;
+    width: 170%;
+    height: 170%;
+    content: '';
+    background-image: conic-gradient(transparent, transparent, transparent, #000080); /* Navy blue */
+    animation: rotate_border 6s linear infinite;
+    animation-delay: -3s;
+}
+
+@keyframes rotate_border {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.login_form {
+    position: absolute;
+    content: '';
+    background-color: #ffffff;
+    border-radius: 50px 5px;
+    inset: 5px;
+    padding: 50px 40px;
+    z-index: 10;
+    color: black; 
+}
+ /* Your additional styles go here */
+ .big-x {
+    font-size: 5em;
+    color: red;
+    text-align: center;
+    font-family: 'Comic Sans MS', cursive;
+    animation: heartbeat 1s infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+/* Your existing styles remain unchanged */
+
+/* Add styling for the button inside the text box */
+#create_account_button {
+    background-color: #4CAF50; /* Green color, you can change this */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px; /* Adjust as needed */
+}
+
+#create_account_button:hover {
+    background-color: #45a049; /* Darker green color on hover */
+}
+
+
+/* Add styling for the buttons */
+#back_to_signup_button,
+#create_account_button {
+    background-color: #4CAF50; /* Green color, you can change this */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px; /* Adjust as needed */
+}
+
+#back_to_signup_button:hover,
+#create_account_button:hover {
+    background-color: #45a049; /* Darker green color on hover */
+}

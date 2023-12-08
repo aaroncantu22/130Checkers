@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="login.css" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="signup.css" />
 </head>
 
 <body>
-    <div class="login_form_container">
-        <div class="login_form">
-            <h2>Login</h2>
-            <form action="fetch-from-base.php" method="post">
+    <div class="signup_form_container">
+        <div class="signup_form">
+            <h2>Create Account</h2>
+            <form action="signup_insert-to-base.php" method="post">
                 <div class="input_group">
                     <i class="fa fa-user"></i>
                     <input
@@ -33,12 +34,12 @@
                         required
                     />
                 </div>
-                <div class="button_group" id="login_button">
-                    <button type="submit">Submit</button>
+                <div class="button_group" id="signup_button">
+                    <button type="submit">Create Account</button>
                 </div>
             </form>
             <div class="footer">
-                <a href="signup_Page.html">Don't have an account? Sign Up!</a>
+                <a href="login_Page.html">Already have an account? Login</a>
             </div>
         </div>
     </div>
