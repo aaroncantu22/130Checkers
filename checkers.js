@@ -151,6 +151,8 @@ var selectedSize;
         var jumpedRow;
         var jumpedCol;
         var jumpedCell;
+
+        var remNum  // set the remove index number
         
         // handle after clicking pieces
         function handlePieceClick(event) {
@@ -259,7 +261,6 @@ var selectedSize;
 
         
         // check the available places
-        var remNum  // set the remove index number
         function isMoveAllowed(row_new,col_new){
             for (var i = 0; i < movCells.length; i++) {
                 var move = movCells[i];
@@ -287,7 +288,7 @@ var selectedSize;
             }
             else {
                 dataPieces[i][j] = 0;
-                if (m == totalNum-1){
+                if (m == totalNum-1 ){
                     dataPieces[m][n] = -2;
                     createPieces.classList.add('king');
                 }
