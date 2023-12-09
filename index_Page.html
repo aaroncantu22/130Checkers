@@ -91,7 +91,6 @@
                 <option value = "board_yellow">Black and Yellow</option>
                 <option value = "board_green">Black and Green</option>
                 <option value = "board_purple">Black and Purple</option>
-                <option value = "board_wood">Wood</option>
             </select>
         </div>
         <br>      
@@ -292,10 +291,6 @@
                             case 'board_purple':
                                 td.style.backgroundColor = "rgb(192, 135, 228)";    // set the purple to board
                                 break;
-                            case 'board_wood':
-                                td.style.backgroundImage = "url('lightbrown_board.jpg')";    // set the purple to board
-                                break;
-
                         }
                     }
                     else {
@@ -332,15 +327,10 @@
                             }
                         }
                         // set the color of board depending on player's choice
-                        if (colorBoard == 'board_wood'){
-                            td.style.backgroundImage = "url('darkbrown_board.jpg')";
-                            board_data2 = "url('darkbrown_board.jpg')";
-                        }
-                        else{
-                            td.style.backgroundColor = "rgb(76, 75, 75)";  // set the black to board
-                            board_data2 = "rgb(76, 75, 75)";
+                        
+                        td.style.backgroundColor = "rgb(76, 75, 75)";  // set the black to board
+                        board_data2 = "rgb(76, 75, 75)";
 
-                        }
                     }                    
                     tr.appendChild(td);
                     
