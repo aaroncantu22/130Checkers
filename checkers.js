@@ -424,8 +424,7 @@ var selectedSize;
                     arrCells = [row-1,col+1];
                     arrRem = [0,0];
                     movCells.push(arrCells);
-                    remCells.push(arrRem);
-                    
+                    remCells.push(arrRem);   
                 }                
                 if (dataPieces[row-1][col-1] == 0){
                     rowInd2 = tbodyInd.rows[row-1];
@@ -461,8 +460,7 @@ var selectedSize;
                     cellInd1 = rowInd1.cells[col+1];
                     cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
                     arrCells = [row-1,col+1];
-                    movCells.push(arrCells);
-                    
+                    movCells.push(arrCells);            
                 }                
                 if (dataPieces[row-1][col-1] == 0){
                     rowInd2 = tbodyInd.rows[row-1];
@@ -476,8 +474,7 @@ var selectedSize;
                     cellInd1 = rowInd1.cells[col+1];
                     cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
                     arrCells = [row+1,col+1];
-                    movCells.push(arrCells);
-                    
+                    movCells.push(arrCells);       
                 }                
                 if (dataPieces[row+1][col-1] == 0){
                     rowInd2 = tbodyInd.rows[row+1];
@@ -487,6 +484,37 @@ var selectedSize;
                     movCells.push(arrCells);
                 }
             }
+            else if (dataPieces[row][col] == 2) {
+                if (dataPieces[row-1][col+1] == 0){
+                    rowInd1 = tbodyInd.rows[row-1];
+                    cellInd1 = rowInd1.cells[col+1];
+                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row-1,col+1];
+                    movCells.push(arrCells);            
+                }                
+                if (dataPieces[row-1][col-1] == 0){
+                    rowInd2 = tbodyInd.rows[row-1];
+                    cellInd2 = rowInd2.cells[col-1];
+                    cellInd2.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row-1,col-1];
+                    movCells.push(arrCells);
+                }
+                if (dataPieces[row+1][col+1] == 0){
+                    rowInd1 = tbodyInd.rows[row+1];
+                    cellInd1 = rowInd1.cells[col+1];
+                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row+1,col+1];
+                    movCells.push(arrCells);       
+                }                
+                if (dataPieces[row+1][col-1] == 0){
+                    rowInd2 = tbodyInd.rows[row+1];
+                    cellInd2 = rowInd2.cells[col-1];
+                    cellInd2.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                    arrCells = [row+1,col-1];
+                    movCells.push(arrCells);
+                }
+            }
+            
             /*
             else if (dataPieces[row][col] == 2) {
             }
