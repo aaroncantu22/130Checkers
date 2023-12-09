@@ -220,7 +220,9 @@
         function startGame(){
             let sizeBoard = document.getElementById('sizeBoard').value;     // get the selected size of board
             let colorBoard = document.getElementById('colorBoard').value;
-            let data = [];      // create martrix for each square
+            let data = [];
+            let dataBoard = [];      // create martrix for each square
+            let dataPieces = []; // create matrix to check the positoin of pieces
             let cells;          // get the size of board
     
             // check the size of board
@@ -235,34 +237,45 @@
 
             // Fetch player one color from the selected options
             let player1Color = document.getElementById('colorPieces_ply1').value;
+            piece_ply1 = player1Color;
 
             // Fetch player two color if there are 2 players
             let player2Color;
             let numPlayer = document.getElementById('numPlayer').value;
             if (numPlayer === '2ply') {
                 player2Color = document.getElementById('colorPieces_ply2').value;
+                //piece_ply2 = player2Color;
             } else {
                 // Default color for player 2 in 1-player mode
                 player2Color = 'black';
+                //piece_ply2 = player2Color;
             }
 
+            
             // Store player one and player two colors in Local Storage
             localStorage.setItem('colorPieces_ply1', player1Color);
             localStorage.setItem('colorPieces_ply2', player2Color);
 
             // create the board
             let tbody = document.createElement('tbody');
+            var board_data1;  // store the color data
+            var board_data2;  // store the color data
             for (let i = 0; i < cells; i++){
                 let tr = document.createElement('tr');
                 data[i] = [];
+                dataBoard[i] = [];
+                dataPieces[i] = [];
                 for (let j = 0; j < cells; j++) {
                     let td = document.createElement('td');
+                    dataBoard[i][j] = 0;
                     // set the color of board
                     if ((i+j)%2 == 0){
                         td.id = "board_color1";
+                        dataPieces[i][j] = 0;                        
                         switch (colorBoard) {
                             case 'board_white':
                                 td.style.backgroundColor = "white"; // set the black to board
+                                board_data1 = "white";
                                 break;
                             case 'board_pink':
                                 td.style.backgroundColor = "pink";  // set the black to board
@@ -287,12 +300,46 @@
                     }
                     else {
                         td.id = "board_color2";
+                        dataBoard[i][j] = 1;
+                        if(cells == 8){
+                            // case of 8x8
+                            if (i < 3){
+                                // player 1 side
+                                dataPieces[i][j] = -1;
+                            }
+                            else if(i > 4) {
+                                // player 2 side
+                                dataPieces[i][j] = 1;
+                            }
+                            else{
+                                // no pieces
+                                dataPieces[i][j] = 0;
+                            }
+                        }
+                        else{
+                            // case of 10x10
+                            if (i < 4){
+                                // player 1 side
+                                dataPieces[i][j] = -1;
+                            }
+                            else if(i > 5) {
+                                // player 2 side
+                                dataPieces[i][j] = 1;
+                            }
+                            else{
+                                // no pieces
+                                dataPieces[i][j] = 0;
+                            }
+                        }
                         // set the color of board depending on player's choice
                         if (colorBoard == 'board_wood'){
                             td.style.backgroundImage = "url('darkbrown_board.jpg')";
+                            board_data2 = "url('darkbrown_board.jpg')";
                         }
                         else{
                             td.style.backgroundColor = "rgb(76, 75, 75)";  // set the black to board
+                            board_data2 = "rgb(76, 75, 75)";
+
                         }
                     }                    
                     tr.appendChild(td);
@@ -301,8 +348,26 @@
                 tbody.appendChild(tr);
             }
 
+            let colorData = {
+                sizeCells: cells,
+                numPlayer: numPlayer,
+                board_data1: board_data1,
+                board_data2: board_data2,
+                piece_ply1: player2Color,
+                piece_ply2: player2Color
+            };
+
+            /* gather the game data */
+
+            console.log(dataBoard);
+            
             localStorage.setItem('data', tbody.outerHTML);  // set the table data of checkers board
             localStorage.setItem('sizeBoard', sizeBoard);  // set the selected size of the board
+            localStorage.setItem('colorBoard', colorBoard);  // set the selected color of the board
+            localStorage.setItem('dataPieces', JSON.stringify(dataPieces));  // set the data of pieces position
+            localStorage.setItem('dataColor', JSON.stringify(colorData));  // set the data of color
+            localStorage.setItem('dataBoard', JSON.stringify(dataBoard));  // set the data of board
+            
             location.href = './game_Page.html' ;    // go to game_Page.html
         }
     </script>
