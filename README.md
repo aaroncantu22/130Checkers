@@ -16,7 +16,7 @@ What each member has done in the project:
   
 - Index Page
   
-    Aaron:
+    Aaron: create the option for pieces
   
     Mayuka: create the option for games
   
@@ -32,9 +32,7 @@ What each member has done in the project:
   
 - Leaderboard Page
   
-    Aaron:
-  
-    Mayuka:
+    Aaron:　create a leaderboard (HTML, CSS, PHP, JS)
 
 
 ------------
