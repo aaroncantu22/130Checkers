@@ -141,6 +141,16 @@ var selectedSize;
         var clickedPiece;
         var selectedPiece = null;
         var movCells;
+
+        var rowInd;
+        var cellInd;
+        var movCells;
+
+        var remCells;
+        var remove;
+        var jumpedRow;
+        var jumpedCol;
+        var jumpedCell;
         
         // handle after clicking pieces
         function handlePieceClick(event) {
@@ -226,12 +236,12 @@ var selectedSize;
             }
         }
 
-        var remCells;
+        
         function removeJumpedPiece(rowStart, colStart, rowEnd, colEnd) {
            
-            var remove = remCells[remNum];
-            var jumpedRow =remove[0];
-            var jumpedCol =remove[1];
+            remove = remCells[remNum];
+            jumpedRow =remove[0];
+            jumpedCol =remove[1];
 
 
             // calculate the place after jumping
@@ -240,7 +250,7 @@ var selectedSize;
 
             console.log("ans:", jumpedRow, jumpedCol);
             // get the cell information after jumping
-            var jumpedCell = document.querySelector('tbody').rows[jumpedRow].cells[jumpedCol];
+            jumpedCell = document.querySelector('tbody').rows[jumpedRow].cells[jumpedCol];
 
             // delete cells jumped by opponents
             jumpedCell.innerHTML = '';
@@ -332,12 +342,10 @@ var selectedSize;
             piece.classList.add('king');            
         }
         
-        var rowInd;
-        var cellInd;
-        var movCells = [];
+        
 
         function getMovalableCells(tbodyInd, row, col, pieceTags){
-            var movCells = [];   // move cells
+            movCells = [];   // move cells
             remCells = [];   // remove cells
             var arrCells;
             var arrRem;     // get remove row and col
