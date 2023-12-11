@@ -140,7 +140,7 @@ var selectedSize;
         var col_new;    // the number of col for destination
         var clickedPiece;
         var selectedPiece = null;
-        var movCells;
+        //var movCells;
 
         var rowInd;
         var cellInd;
@@ -152,8 +152,7 @@ var selectedSize;
         var jumpedCol;
         var jumpedCell;
 
-        var remNum  // set the remove index number
-        
+                
         // handle after clicking pieces
         function handlePieceClick(event) {
             if (currentPlayer === 'player1') {
@@ -185,7 +184,8 @@ var selectedSize;
                 
                 var tbodyInd = document.querySelector('tbody');
                     
-                movCells = getMovalableCells(tbodyInd, rowNum, colNum, clickedPiece.classList);
+                //movCells = getMovalableCells(tbodyInd, rowNum, colNum, clickedPiece.classList);
+                getMovalableCells(tbodyInd, rowNum, colNum, clickedPiece.classList);
 
                 var allPieces = document.querySelectorAll('.checker-piece');
                 allPieces.forEach(function (piece) {
@@ -238,28 +238,7 @@ var selectedSize;
             }
         }
 
-        
-        function removeJumpedPiece(rowStart, colStart, rowEnd, colEnd) {
-           
-            remove = remCells[remNum];
-            jumpedRow =remove[0];
-            jumpedCol =remove[1];
-
-
-            // calculate the place after jumping
-            //var jumpedRow = (rowStart + rowEnd) / 2;
-            //var jumpedCol = (colStart + colEnd) / 2;
-
-            console.log("ans:", jumpedRow, jumpedCol);
-            // get the cell information after jumping
-            jumpedCell = document.querySelector('tbody').rows[jumpedRow].cells[jumpedCol];
-
-            // delete cells jumped by opponents
-            jumpedCell.innerHTML = '';
-            dataPieces[jumpedRow][jumpedCol] = 0;
-        }
-
-        
+        var remNum  // set the remove index number
         // check the available places
         function isMoveAllowed(row_new,col_new){
             for (var i = 0; i < movCells.length; i++) {
@@ -271,24 +250,40 @@ var selectedSize;
             }
             return false;
         }
+        
+        function removeJumpedPiece(rowStart, colStart, rowEnd, colEnd) {
+           
+            remove = remCells[remNum];
+            jumpedRow =remove[0];
+            jumpedCol =remove[1];
+
+            console.log("ans:", remNum, remove, jumpedRow, jumpedCol);
+            // get the cell information after jumping
+            jumpedCell = document.querySelector('tbody').rows[jumpedRow].cells[jumpedCol];
+
+            // delete cells jumped by opponents
+            jumpedCell.innerHTML = '';
+            dataPieces[jumpedRow][jumpedCol] = 0;
+        }
+
+
 
         function update_dataPieces(i, j, m, n, piecesTags, createPieces){
             var totalNum = dataColor.sizeCells;
             if (piecesTags.contains('player1')){
-                dataPieces[i][j] = 0;
-                if (m == 0){
+                //dataPieces[i][j] = 0;
+                if (m == 0 || dataPieces[i][j] == 2){
                     dataPieces[m][n] = 2;
                     createPieces.classList.add('king');
                 }
                 else {
                     dataPieces[m][n] = 1;
-                }
-                
+                }                
                 console.log('dataPieces1:', dataPieces);
             }
             else {
-                dataPieces[i][j] = 0;
-                if (m == totalNum-1 ){
+                //dataPieces[i][j] = 0;
+                if (m == totalNum-1 || dataPieces[i][j] == -2){
                     dataPieces[m][n] = -2;
                     createPieces.classList.add('king');
                 }
@@ -297,6 +292,7 @@ var selectedSize;
                 }
                 console.log('dataPieces:', dataPieces);
             } 
+            dataPieces[i][j] = 0;
         }
              
 
@@ -347,6 +343,7 @@ var selectedSize;
 
         function getMovalableCells(tbodyInd, row, col, pieceTags){
             movCells = [];   // move cells
+            console.log("movCells", movCells);
             remCells = [];   // remove cells
             var arrCells;
             var arrRem;     // get remove row and col
@@ -366,153 +363,308 @@ var selectedSize;
             
             console.log("cell 3: " ,dataColor.sizeCells);
 
+            // player 2 (regular pieces)
             if (dataPieces[row][col] == -1) {
-                // player 2                
-                if (dataPieces[row+1][col+1] == 0){
-                    rowInd = tbodyInd.rows[row+1];
-                    cellInd = rowInd.cells[col+1];
-                    cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';  // get applicable "td"
-                    arrCells = [row+1,col+1];
-                    arrRem = [0,0];
-                    movCells.push(arrCells);
-                    remCells.push(arrRem);
-                }                                
-                if (dataPieces[row+1][col-1] == 0){
-                    rowInd = tbodyInd.rows[row+1];
-                    cellInd = rowInd.cells[col-1];
-                    cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row+1,col-1];
-                    arrRem = [0,0];                        
-                    movCells.push(arrCells);
-                    remCells.push(arrRem);
-                }                               
-                if (totalNum > row+2 && dataPieces[row+1][col+1] == 1 && dataPieces[row+2][col+2] == 0){
-                    rowInd = tbodyInd.rows[row+2];
-                    cellInd = rowInd.cells[col+2];
-                    cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row+2,col+2];
-                    arrRem = [row+1,col+1];
-                    movCells.push(arrCells);
-                    remCells.push(arrRem);
-                    console.log("dataPieces",dataPieces);
-                    console.log("dataColor", dataColor);
+                // bottom right
+                if (row+1 < totalNum && col+1 < totalNum){
+                    if (dataPieces[row+1][col+1] == 0){
+                        rowInd = tbodyInd.rows[row+1];
+                        cellInd = rowInd.cells[col+1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';  // get applicable "td"
+                        arrCells = [row+1,col+1];
+                        arrRem = [0,0];
+                        movCells.push(arrCells);
+                        remCells.push(arrRem);
+                    }
                 }
-                if (totalNum > row+2 && dataPieces[row+1][col-1] == '1' && dataPieces[row+2][col-2] == 0){
-                    rowInd = tbodyInd.rows[row+2];
-                    cellInd = rowInd.cells[col-2];
-                    cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row+2,col-2];
-                    arrRem = [row+1,col-1];
-                    movCells.push(arrCells);
-                    remCells.push(arrRem);
-                    console.log("dataPieces",dataPieces);
-                    console.log("dataColor", dataColor);
+                // bottom left
+                if (row+1 < totalNum && 0 <= col-1){                                
+                    if (dataPieces[row+1][col-1] == 0){
+                        rowInd = tbodyInd.rows[row+1];
+                        cellInd = rowInd.cells[col-1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+1,col-1];
+                        arrRem = [0,0];                        
+                        movCells.push(arrCells);
+                        remCells.push(arrRem);
+                    } 
+                }  
+                // bottom right (jump case)  
+                if (row+1 < totalNum && col+1 < totalNum && row+2 < totalNum && col+2 < totalNum){                           
+                    if ((dataPieces[row+1][col+1] == 1 || dataPieces[row+1][col+1] == 2) && dataPieces[row+2][col+2] == 0){
+                        rowInd = tbodyInd.rows[row+2];
+                        cellInd = rowInd.cells[col+2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+2,col+2];
+                        arrRem = [row+1,col+1];
+                        movCells.push(arrCells);
+                        remCells.push(arrRem);
+                        console.log("dataPieces",dataPieces);
+                        console.log("dataColor", dataColor);
+                    }
                 }
-            
-                /*
-                if (row+1 == dataColor.sizeCells){
-                    // set to the king
-
-                }
-                */
-            }
-            else if (dataPieces[row][col] == 1) {
-                // player 1
-                if (dataPieces[row-1][col+1] == 0){
-                    rowInd1 = tbodyInd.rows[row-1];
-                    cellInd1 = rowInd1.cells[col+1];
-                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row-1,col+1];
-                    arrRem = [0,0];
-                    movCells.push(arrCells);
-                    remCells.push(arrRem);   
-                }                
-                if (dataPieces[row-1][col-1] == 0){
-                    rowInd2 = tbodyInd.rows[row-1];
-                    cellInd2 = rowInd2.cells[col-1];
-                    cellInd2.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row-1,col-1];
-                    arrRem = [0,0];
-                    movCells.push(arrCells);
-                    remCells.push(arrRem);
-                }
-                if (0 <= row-2 && dataPieces[row-1][col+1] == -1 && dataPieces[row-2][col+2] == 0){
-                    rowInd1 = tbodyInd.rows[row-2];
-                    cellInd1 = rowInd1.cells[col+2];
-                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row-2,col+2];
-                    arrRem = [row-1,col+1];
-                    movCells.push(arrCells);
-                    remCells.push(arrRem);
-                }
-                if(0 <= row-2 && dataPieces[row-1][col-1] == -1 && dataPieces[row-2][col-2] == 0){
-                    rowInd1 = tbodyInd.rows[row-2];
-                    cellInd1 = rowInd1.cells[col-2];
-                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row-2,col-2];
-                    arrRem = [row-1,col-1];
-                    movCells.push(arrCells);
-                    remCells.push(arrRem);
+                // bottom left (jump case)
+                if (row+1 < totalNum && 0 <= col-1 && row+2 < totalNum && 0 <= col-2){ 
+                    if ((dataPieces[row+1][col-1] == 1 || dataPieces[row+1][col-1] == 2) && dataPieces[row+2][col-2] == 0){
+                        rowInd = tbodyInd.rows[row+2];
+                        cellInd = rowInd.cells[col-2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+2,col-2];
+                        arrRem = [row+1,col-1];
+                        movCells.push(arrCells);
+                        remCells.push(arrRem);
+                        console.log("dataPieces",dataPieces);
+                        console.log("dataColor", dataColor);
+                    }
                 }
             }
+            // player 1 (Regular Pieces)
+            else if (dataPieces[row][col] == 1) {    
+                // Top right
+                if (0 <= row-1 && col+1 < totalNum){                             
+                    if (dataPieces[row-1][col+1] == 0){
+                        rowInd = tbodyInd.rows[row-1];
+                        cellInd = rowInd.cells[col+1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-1,col+1];
+                        arrRem = [0,0];
+                        movCells.push(arrCells);
+                        remCells.push(arrRem);   
+                    }     
+                } 
+                // top left  
+                if (0 <= row-1 && 0 <= col-1){        
+                    if (dataPieces[row-1][col-1] == 0){
+                        rowInd = tbodyInd.rows[row-1];
+                        cellInd = rowInd.cells[col-1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-1,col-1];
+                        arrRem = [0,0];
+                        movCells.push(arrCells);
+                        remCells.push(arrRem);
+                    }
+                } 
+                // top right (jump case)
+                if (0 <= row-1 && col+1 < totalNum && 0 <= row-2 && col+2 < totalNum){  
+                    if ((dataPieces[row-1][col+1] == -1 || dataPieces[row-1][col+1] == -2) && dataPieces[row-2][col+2] == 0){
+                        rowInd = tbodyInd.rows[row-2];
+                        cellInd = rowInd.cells[col+2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-2,col+2];
+                        arrRem = [row-1,col+1];
+                        movCells.push(arrCells);
+                        remCells.push(arrRem);
+                    }
+                }
+                // top left (jump case)
+                if (0 <= row-1 && 0 <= col-1 && 0 <= row-2 && 0 <= col-2){  
+                    if((dataPieces[row-1][col-1] == -1 || dataPieces[row-1][col-1] == -2) && dataPieces[row-2][col-2] == 0){
+                        rowInd = tbodyInd.rows[row-2];
+                        cellInd = rowInd.cells[col-2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-2,col-2];
+                        arrRem = [row-1,col-1];
+                        movCells.push(arrCells);
+                        remCells.push(arrRem);
+                    }
+                }
+            }
+            // player 2 (king pieces)
             else if (dataPieces[row][col] == -2) {
-                if (dataPieces[row-1][col+1] == 0){
-                    rowInd1 = tbodyInd.rows[row-1];
-                    cellInd1 = rowInd1.cells[col+1];
-                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row-1,col+1];
-                    movCells.push(arrCells);            
-                }                
-                if (dataPieces[row-1][col-1] == 0){
-                    rowInd2 = tbodyInd.rows[row-1];
-                    cellInd2 = rowInd2.cells[col-1];
-                    cellInd2.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row-1,col-1];
-                    movCells.push(arrCells);
+                // Top right
+                if (0 < row-1 && col+1 < totalNum){
+                    if (dataPieces[row-1][col+1] == 0){
+                        rowInd = tbodyInd.rows[row-1];
+                        cellInd = rowInd.cells[col+1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-1,col+1];
+                        movCells.push(arrCells);
+                        arrRem = [0,0]; 
+                        remCells.push(arrRem);  
+                    }    
+                } 
+                // Top left 
+                if (0 <= row-1 && 0 <= col-1){          
+                    if (dataPieces[row-1][col-1] == 0){
+                        rowInd = tbodyInd.rows[row-1];
+                        cellInd = rowInd.cells[col-1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-1,col-1];
+                        movCells.push(arrCells);
+                        arrRem = [0,0]; 
+                        remCells.push(arrRem);  
+                    }
                 }
-                if (dataPieces[row+1][col+1] == 0){
-                    rowInd1 = tbodyInd.rows[row+1];
-                    cellInd1 = rowInd1.cells[col+1];
-                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row+1,col+1];
-                    movCells.push(arrCells);       
-                }                
-                if (dataPieces[row+1][col-1] == 0){
-                    rowInd2 = tbodyInd.rows[row+1];
-                    cellInd2 = rowInd2.cells[col-1];
-                    cellInd2.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row+1,col-1];
-                    movCells.push(arrCells);
+                // Bottom right
+                if (row+1 < totalNum && col+1 < totalNum){
+                    if (dataPieces[row+1][col+1] == 0){
+                        rowInd = tbodyInd.rows[row+1];
+                        cellInd = rowInd.cells[col+1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+1,col+1];
+                        movCells.push(arrCells);
+                        arrRem = [0,0]; 
+                        remCells.push(arrRem);     
+                    } 
+                }
+                // Bottom left  
+                if (row+1 < totalNum && 0 <= col-1){             
+                    if (dataPieces[row+1][col-1] == 0){
+                        rowInd = tbodyInd.rows[row+1];
+                        cellInd = rowInd.cells[col-1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+1,col-1];
+                        movCells.push(arrCells);
+                        arrRem = [0,0]; 
+                        remCells.push(arrRem);  
+                    }
+                }
+                // Top right (jump case)
+                if (0 <= row-1 && col+1 < totalNum && 0 <= row-2 && col+2 < totalNum){
+                    if ((dataPieces[row-1][col+1] == 1 || dataPieces[row-1][col+1] == 2) && dataPieces[row-2][col+2] == 0){
+                        rowInd = tbodyInd.rows[row-2];
+                        cellInd = rowInd.cells[col+2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-2,col+2];
+                        movCells.push(arrCells);
+                        arrRem = [row-1,col+1];
+                        remCells.push(arrRem);
+                    }
+                }
+                // Top left (jump case)
+                if (0 <= row-1 && 0 <= col-1 && 0 <= row-2 && 0 <= col-2){
+                    if((dataPieces[row-1][col-1] == 1 || dataPieces[row-1][col-1] == 2) && dataPieces[row-2][col-2] == 0){
+                        rowInd = tbodyInd.rows[row-2];
+                        cellInd = rowInd.cells[col-2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-2,col-2];                    
+                        movCells.push(arrCells);
+                        arrRem = [row-1,col-1];
+                        remCells.push(arrRem);
+                    }
+                }
+                // Bottom right (jump case)
+                if (row+1 < totalNum && col+1 < totalNum && row+2 < totalNum && col+2 < totalNum){
+                    if ((dataPieces[row+1][col+1] == 1 || dataPieces[row+1][col+1] == 2) && dataPieces[row+2][col+2] == 0){
+                        rowInd = tbodyInd.rows[row+2];
+                        cellInd = rowInd.cells[col+2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+2,col+2];                    
+                        movCells.push(arrCells);
+                        arrRem = [row+1,col+1];
+                        remCells.push(arrRem);
+                    }
+                }
+                // Bottom left (jump case)
+                if (row+1 < totalNum && 0 <= col-1 && row+2 < totalNum && 0 <= col-2){
+                    if((dataPieces[row+1][col-1] == 1 || dataPieces[row+1][col-1] == 2) && dataPieces[row+2][col-2] == 0){
+                        rowInd = tbodyInd.rows[row+2];
+                        cellInd = rowInd.cells[col-2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+2,col-2];                    
+                        movCells.push(arrCells);
+                        arrRem = [row+1,col-1];
+                        remCells.push(arrRem);
+                    }
                 }
             }
+            // player 1 (king pieces)
             else if (dataPieces[row][col] == 2) {
-                if (dataPieces[row-1][col+1] == 0){
-                    rowInd1 = tbodyInd.rows[row-1];
-                    cellInd1 = rowInd1.cells[col+1];
-                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row-1,col+1];
-                    movCells.push(arrCells);            
-                }                
-                if (dataPieces[row-1][col-1] == 0){
-                    rowInd2 = tbodyInd.rows[row-1];
-                    cellInd2 = rowInd2.cells[col-1];
-                    cellInd2.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row-1,col-1];
-                    movCells.push(arrCells);
+                // Top right
+                if (0 <= row-1 && col+1 < totalNum){
+                    if (dataPieces[row-1][col+1] == 0){
+                        rowInd = tbodyInd.rows[row-1];
+                        cellInd = rowInd.cells[col+1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-1,col+1];
+                        movCells.push(arrCells); 
+                        arrRem = [0,0]; 
+                        remCells.push(arrRem);            
+                    }  
                 }
-                if (dataPieces[row+1][col+1] == 0){
-                    rowInd1 = tbodyInd.rows[row+1];
-                    cellInd1 = rowInd1.cells[col+1];
-                    cellInd1.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row+1,col+1];
-                    movCells.push(arrCells);       
-                }                
-                if (dataPieces[row+1][col-1] == 0){
-                    rowInd2 = tbodyInd.rows[row+1];
-                    cellInd2 = rowInd2.cells[col-1];
-                    cellInd2.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
-                    arrCells = [row+1,col-1];
-                    movCells.push(arrCells);
+                // Top left 
+                if (0 <= row-1 && 0 <= col-1){            
+                    if (dataPieces[row-1][col-1] == 0){
+                        rowInd = tbodyInd.rows[row-1];
+                        cellInd = rowInd.cells[col-1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-1,col-1];
+                        movCells.push(arrCells);
+                        arrRem = [0,0]; 
+                        remCells.push(arrRem); 
+                    }
+                }
+                // Bottom right
+                if (row+1 < totalNum && col+1 < totalNum){
+                    if (dataPieces[row+1][col+1] == 0){
+                        rowInd = tbodyInd.rows[row+1];
+                        cellInd = rowInd.cells[col+1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+1,col+1];
+                        movCells.push(arrCells); 
+                        arrRem = [0,0]; 
+                        remCells.push(arrRem);       
+                    }
+                }   
+                // Bottom left
+                if (row+1 < totalNum && 0 < col-1){             
+                    if (dataPieces[row+1][col-1] == 0){
+                        rowInd = tbodyInd.rows[row+1];
+                        cellInd = rowInd.cells[col-1];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+1,col-1];
+                        movCells.push(arrCells);
+                        arrRem = [0,0]; 
+                        remCells.push(arrRem); 
+                    }
+                }
+                // Top right (jump case)
+                if (0 <= row-1 && col+1 < totalNum && 0 <= row-2 && col+2 < totalNum){
+                    if (dataPieces[row-1][col+1] == -1 && dataPieces[row-2][col+2] == 0){
+                        rowInd = tbodyInd.rows[row-2];
+                        cellInd = rowInd.cells[col+2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-2,col+2];                    
+                        movCells.push(arrCells);
+                        arrRem = [row-1,col+1];
+                        remCells.push(arrRem);
+                    }
+                }
+                // Top left (jump case)
+                if (0 <= row-1 && 0 <= col-1 && 0 <= row-2 && 0 <= col-2){
+                    if((dataPieces[row-1][col-1] == -1 || dataPieces[row-1][col-1] == -2) && dataPieces[row-2][col-2] == 0){
+                        rowInd = tbodyInd.rows[row-2];
+                        cellInd = rowInd.cells[col-2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row-2,col-2];                    
+                        movCells.push(arrCells);
+                        arrRem = [row-1,col-1];
+                        remCells.push(arrRem);
+                    }
+                }
+                // Bottom right (jump case)
+                if (0 <= row+1 && 0 <= col+1 && 0 <= row+2 && 0 <= col+2){
+                    if ((dataPieces[row+1][col+1] == -1 || dataPieces[row+1][col+1] == -2) && dataPieces[row+2][col+2] == 0){
+                        rowInd = tbodyInd.rows[row+2];
+                        cellInd = rowInd.cells[col+2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+2,col+2];                    
+                        movCells.push(arrCells);
+                        arrRem = [row+1,col+1];
+                        remCells.push(arrRem);
+                    }
+                }
+                // Bottom left (jump case)
+                if (row+1 < totalNum && 0 <= col-1 && row+2 < totalNum && 0 <= col-2){
+                    if((dataPieces[row+1][col-1] == -1 || dataPieces[row+1][col-1] == -2) && dataPieces[row+2][col-2] == 0){
+                        rowInd = tbodyInd.rows[row+2];
+                        cellInd = rowInd.cells[col-2];
+                        cellInd.style.backgroundColor = 'rgba(208, 44, 3, 0.688)';
+                        arrCells = [row+2,col-2];                    
+                        movCells.push(arrCells);
+                        arrRem = [row+1,col-1];
+                        remCells.push(arrRem);
+                    }
                 }
             }
             
@@ -523,6 +675,8 @@ var selectedSize;
             //checkPromotion(row, currentPlayer, col);
             console.log("dataPieces",dataPieces);
             console.log("dataColor", dataColor);
+            console.log("removeCells" ,remCells);
+            console.log("movCells2", movCells);
             return movCells;            
         }
     //}
