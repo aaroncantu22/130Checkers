@@ -1,0 +1,109 @@
+/* Page Background Color (all pages) */
+        /* --- Checker Board --- */
+        table {
+            border-collapse: collapse;
+            border: 10px solid rgb(182, 182, 182);
+            margin: auto; /* set the board at the center */
+        }
+
+        td, tr {
+            border: solid rgb(76, 75, 75); /* Add this line to set the border for cells and rows */
+            width: 60px;
+            height: 60px;
+        }
+
+        #board_position {
+            /* set the board on the center */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        /* --- Timer and Button --- */
+        #timer_position {
+            /* set the position of timer and button */
+            margin-left: -15em;
+            margin-right: 5em;
+            margin-bottom: 5em;
+        }
+
+        #playTime, #displayTurn {
+            /* set the size of timer*/
+            font-size: 30px;
+        }
+
+        /* Checker Pieces */
+        .checker-piece {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 5px;
+        }
+
+        /* King Pieces */
+        .checker-piece.king {
+            background-color: gold; 
+            box-shadow: 0 0 10px gold;
+        }
+body {
+    text-align: center;
+    background-color: rgb(206, 209, 212);
+}
+
+
+/* Fresno State Logo (all pages) */
+#logo {
+    display: flex;
+    background-color: white;
+    /*align-items: center;*/
+    /*margin: auto;*/
+}
+
+.bulldogs {
+    /* set the size of bulldogs logo */
+    margin: auto;
+    width: 100px;
+    height: auto;
+}
+
+#logo1 {
+    /* set the position of LEFT bulldogs logo */
+    margin-left: 12em;
+}
+
+#logo2 {
+    /* set the position of RIGHT bulldogs logo */
+    margin-right: 12em;
+}
+
+
+/* Page Title Color (all pages) */
+h1 {
+    color: rgb(196, 18, 48);
+}
+
+
+/* Back Page Button (without index and login page) */
+.backPage {
+    /* set the position of buttun to return index_Page.html */
+    margin-left: 60em;
+}
+
+.signOut {
+    /* set the position of Sign Out button */
+    text-align: right;
+    margin-right: 20em;
+}
+
+/*
+.line_position {
+    text-align: left;
+    margin-left: 34em;
+}
+*/
+
+#player1, #player2{
+    /* create indent before the color options of pieces */
+    text-indent: 2em;
+}

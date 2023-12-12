@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkers Leaderboard</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="checkers.css">
+    <link rel="stylesheet" href="leaderboard.css">
+</head>
+<body>
+    <!-- Fresno state logo and Title -->
+    <div id="logo">
+        <img class="bulldogs" id="logo1" src="bulldogs.jpg" alt="Fresno State Bulldogs">
+        <article>
+            <header>
+                <h1>Leaderboard</h1>
+            </header>            
+        </article>
+        <img class="bulldogs" id="logo2"  src="bulldogs.jpg" alt="Fresno State Bulldogs">
+    </div>
+    <br>
+
+    <!-- Go back to Home Page -->
+    <button class="backPage" type="button" onclick="location.href = '/mysite/130Checkers/Game/index_Page.html'">GO BACK</button>
+
+    <!-- Leaderboard Table -->
+    <table id="leaderboardTable">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>User</th>
+                <th>Wins</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- This is where you dynamically generate the table rows based on your data -->
+            <tr>
+                <td>1</td>
+                <td>Username1</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Username2</td>
+                <td>8</td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+</body>
+</html>
