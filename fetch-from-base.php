@@ -15,24 +15,31 @@ if ($conn->connect_error) {
     die('Connection Failed: ' . $conn->connect_error);
 } else {
     // Use prepared statements to prevent SQL injection
-    $stmt = $conn->prepare("SELECT * FROM users WHERE userName = ? AND userPwd = ?");
-    $stmt->bind_param("ss", $username, $password);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE userName = ?");
+    $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Username and password found, redirect to index_Page.html
-        header("Location: index_Page.html");
-        exit();
-    } else {
-        // Username or password not found
-    
+        // Username found, check the password
+        $row = $result->fetch_assoc();
+        $hashedPasswordFromDB = $row['userPassword'];
+
+        if (password_verify($password, $hashedPasswordFromDB)) {
+            // Passwords match, redirect to index_Page.html
+            header("Location: index_Page.html");
+            exit();
+        }
     }
 
-    $stmt->close();
-    $conn->close();
+    // Username or password not found
+    // Display error message
 }
+
+$stmt->close();
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

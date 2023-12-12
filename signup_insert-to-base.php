@@ -8,15 +8,18 @@ $pass = '';
 $username = $_POST['username'];
 $password = $_POST['password'];
 
+// Hash the password
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
 // Database connection
 $conn = new mysqli($host, $user, $pass, $db);
 
 if ($conn->connect_error) {
     die('Connection Failed: ' . $conn->connect_error);
 } else {
-    // Check if the username or password already exists in the database
-    $stmt = $conn->prepare("SELECT * FROM users WHERE userName = ? OR userPwd = ?");
-    $stmt->bind_param("ss", $username, $password);
+    // Check if the username or hashed password already exists in the database
+    $stmt = $conn->prepare("SELECT * FROM users WHERE userName = ? OR userPassword = ?");
+    $stmt->bind_param("ss", $username, $hashedPassword);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -24,9 +27,9 @@ if ($conn->connect_error) {
         // Username or password already exists
         $existingUserError = "Username or password is already in use!";
     } else {
-        // Insert new user into the database
-        $stmt = $conn->prepare("INSERT INTO users (userName, userPwd) VALUES (?, ?)");
-        $stmt->bind_param("ss", $username, $password);
+        // Insert new user into the database with the hashed password
+        $stmt = $conn->prepare("INSERT INTO users (userName, userPassword) VALUES (?, ?)");
+        $stmt->bind_param("ss", $username, $hashedPassword);
         $stmt->execute();
     }
 
@@ -34,6 +37,7 @@ if ($conn->connect_error) {
     $conn->close();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
