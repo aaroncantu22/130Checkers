@@ -77,7 +77,6 @@ body {
     z-index: 10;
     color: black; 
 }
- /* Your additional styles go here */
  .big-x {
     font-size: 5em;
     color: red;
@@ -86,6 +85,22 @@ body {
     animation: heartbeat 1s infinite;
 }
 
+.big-check {
+    font-size: 5em;
+    color: green;
+    text-align: center;
+    font-family: 'Comic Sans MS', cursive;
+    animation: heartbeat 1s infinite;
+} 
+
+@keyframes beat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
 @keyframes heartbeat {
     0%, 100% {
         transform: scale(1);
@@ -94,7 +109,6 @@ body {
         transform: scale(1.1);
     }
 }
-/* Your existing styles remain unchanged */
 
 /* Add styling for the button inside the text box */
 #create_account_button {
