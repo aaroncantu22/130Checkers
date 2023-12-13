@@ -254,7 +254,7 @@ function startGame(){
 
     // check whether player1 and player2 select different colors
     if(numPlayer === '2ply' && player1Color === player2Color){
-        alert("Plese choose different color between player1 and player2");
+        alert("Please choose different color between player1 and player2");
     }
     else{
         location.href = './game_Page.html' ;    // go to game_Page.html
