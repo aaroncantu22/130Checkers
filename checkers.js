@@ -207,7 +207,8 @@ var selectedSize;
             clickB.addEventListener('click', boardClick);
         });
         
-
+        
+        //zvar gameOver = false;
         // set the board click event
         function boardClick(event){
             var clilckedBoard = event.target;   // the clicked cell
@@ -238,15 +239,258 @@ var selectedSize;
                 //checkDoubleJump(clickedPiece.classList, createPieces, row_new, col_new);
                 console.log("num: ", rowNum, colNum, row_new, col_new);
                 selectedPiece = null;
-                countRestPiece();
-                document.getElementById('displayTurn').innerHTML = currentPlayer +"'s Turn";
+                checkWinner();
             }
         }
 
         // check the condition of game (win, lose, or continue)
+        function checkWinner(){
+            var countPiece = countRestPiece();
+            var gameStatus = gameOver();
+            console.log("checkMove:", gameStatus);
+            if(countPiece[1] == 0){
+                // player 1 Wins (delete all player2's pieces)
+                document.getElementById("displayTurn").innerHTML = "Player1 Wins &#129395";
+            }
+            else if (countPiece[0] == 0){
+                // player 2 wins    (delete all player1's pieces)
+                document.getElementById("displayTurn").innerHTML = "Player2 Wins &#129321";
+            }
+            else if (gameStatus == "losePly2"){
+                // player 1 Wins (no more move)
+                document.getElementById("displayTurn").innerHTML = "Player1 Wins &#129395";
+            }
+            else if (gameStatus == "losePly1"){
+                // player 2 wins (no more move)
+                document.getElementById("displayTurn").innerHTML = "Player2 Wins &#129321";
+            }
+            else {
+                // continue game
+                document.getElementById("displayTurn").innerHTML = currentPlayer +"'s Turn";
+            }
+        }
+
+        // check whether game is over or not
+        function gameOver(){
+            var arrReg1;
+            var arrReg2;
+            var condRegular1 = [];  // Player1's condition
+            var condRegular2 = [];  // player2's condition
+            var totalNum = dataColor.sizeCells;     // set the size of cells
+
+            /*
+            --- explaination about each value ----
+            jump = jump case
+            regular = regular case
+            king = king case
+            arr = [currentRow, currentCol, removeRow, removeCol, destRow, destCol, status]
+            */
+
+            if(currentPlayer == "player2"){
+                // check player1 can't move
+                for(let row=0;row<dataColor.sizeCells;row++){
+                    for(let col=0;col<dataColor.sizeCells;col++){
+                        // Regular pieces case
+                        if (dataPieces[row][col] == 1){
+                            // Top right
+                            if (0 <= row-1 && col+1 < totalNum){                             
+                                if (dataPieces[row-1][col+1] == 0){
+                                    arrReg1 = [row, col, 0, 0, row-1, col+1, 'regular'];
+                                    condRegular1.push(arrReg1);
+                                }     
+                            } 
+                            // top left  
+                            if (0 <= row-1 && 0 <= col-1){        
+                                if (dataPieces[row-1][col-1] == 0){
+                                    arrReg1 = [row, col, 0, 0, row-1, col-1, 'regular'];
+                                    condRegular1.push(arrReg1);
+                                }
+                            } 
+                            // top right (jump case)
+                            if (0 <= row-1 && col+1 < totalNum && 0 <= row-2 && col+2 < totalNum){  
+                                if ((dataPieces[row-1][col+1] == -1 || dataPieces[row-1][col+1] == -2) && dataPieces[row-2][col+2] == 0){
+                                    arrReg1 = [row, col, row-1, col+1, row-2, col+2, 'jump'];
+                                    condRegular1.push(arrReg1);
+                                }
+                            }
+                            // top left (jump case)
+                            if (0 <= row-1 && 0 <= col-1 && 0 <= row-2 && 0 <= col-2){  
+                                if((dataPieces[row-1][col-1] == -1 || dataPieces[row-1][col-1] == -2) && dataPieces[row-2][col-2] == 0){
+                                    arrReg1 = [row, col, row-1, col-1, row-2, col-2, 'jump'];
+                                    condRegular1.push(arrReg1);
+                                }
+                            }
+                        }
+                        // king pieces case
+                        if (dataPieces[row][col] == 2){
+                            // Top right
+                            if (0 <= row-1 && col+1 < totalNum){
+                                if (dataPieces[row-1][col+1] == 0){
+                                    arrReg1 = [row, col, 0, 0, row-1, col+1, 'regular'];
+                                    condRegular1.push(arrReg1);
+                                }  
+                            }
+                            // Top left 
+                            if (0 <= row-1 && 0 <= col-1){            
+                                if (dataPieces[row-1][col-1] == 0){
+                                    arrReg1 = [row, col, 0, 0, row-1, col-1, 'regular'];
+                                    condRegular1.push(arrReg1);
+                                }
+                            }
+                            // Bottom right
+                            if (row+1 < totalNum && col+1 < totalNum){
+                                if (dataPieces[row+1][col+1] == 0){
+                                    arrReg1 = [row, col, 0, 0, row+1, col+1, 'regular'];
+                                    condRegular1.push(arrReg1);
+                                }
+                            }   
+                            // Bottom left
+                            if (row+1 < totalNum && 0 < col-1){             
+                                if (dataPieces[row+1][col-1] == 0){
+                                    arrReg1 = [row, col, 0, 0, row+1, col-1, 'regular'];
+                                    condRegular1.push(arrReg1);
+                                }
+                            }
+                            // Top right (jump case)
+                            if (0 <= row-1 && col+1 < totalNum && 0 <= row-2 && col+2 < totalNum){
+                                if (dataPieces[row-1][col+1] == -1 && dataPieces[row-2][col+2] == 0){
+                                    arrReg1 = [row, col, row-1, col+1, row-2, col+2, 'jump'];
+                                    condRegular1.push(arrReg1);
+                                }
+                            }
+                            // Top left (jump case)
+                            if (0 <= row-1 && 0 <= col-1 && 0 <= row-2 && 0 <= col-2){
+                                if((dataPieces[row-1][col-1] == -1 || dataPieces[row-1][col-1] == -2) && dataPieces[row-2][col-2] == 0){
+                                    arrReg1 = [row, col, row-1, col-1, row-2, col-2, 'jump'];
+                                    condRegular1.push(arrReg1);
+                                }
+                            }
+                            // Bottom right (jump case)
+                            if (0 <= row+1 && 0 <= col+1 && 0 <= row+2 && 0 <= col+2){
+                                if ((dataPieces[row+1][col+1] == -1 || dataPieces[row+1][col+1] == -2) && dataPieces[row+2][col+2] == 0){
+                                    arrReg1 = [row, col, row+1, col+1, row+2, col+2, 'jump'];
+                                    condRegular1.push(arrReg1);
+                                }
+                            }
+                            // Bottom left (jump case)
+                            if (row+1 < totalNum && 0 <= col-1 && row+2 < totalNum && 0 <= col-2){
+                                if((dataPieces[row+1][col-1] == -1 || dataPieces[row+1][col-1] == -2) && dataPieces[row+2][col-2] == 0){
+                                    arrReg1 = [row, col, row+1, col-1, row+2, col-2, 'jump'];
+                                    condRegular1.push(arrReg1);
+                                }
+                            }
+                        }
+                    }                        
+                }
+                if(condRegular1.length == 0){
+                    // player 1 lose if it doesn't have any place to move
+                    return "losePly1";
+                }   
+                console.log("condReg1:None");                           
+            }
+            else{
+                // check player2 can't move
+                for(let row=0;row<dataColor.sizeCells;row++){
+                    for(let col=0;col<dataColor.sizeCells;col++){
+                        if (dataPieces[row][col] == -1){
+                            // bottom right
+                            if (row+1 < totalNum && col+1 < totalNum){
+                                if (dataPieces[row+1][col+1] == 0){
+                                    arrReg2 = [row, col, 0, 0, row+1, col+1, 'regular'];
+                                    condRegular2.push(arrReg2);
+                                }
+                            }
+                            // bottom left
+                            if (row+1 < totalNum && 0 <= col-1){                                
+                                if (dataPieces[row+1][col-1] == 0){
+                                    arrReg2 = [row, col, 0, 0, row+1, col-1, 'regular'];
+                                    condRegular2.push(arrReg2);
+                                } 
+                            }  
+                            // bottom right (jump case)  
+                            if (row+1 < totalNum && col+1 < totalNum && row+2 < totalNum && col+2 < totalNum){                           
+                                if ((dataPieces[row+1][col+1] == 1 || dataPieces[row+1][col+1] == 2) && dataPieces[row+2][col+2] == 0){
+                                    arrReg2 = [row, col, row+1, col+1, row+2, col+2, 'jump'];
+                                    condRegular2.push(arrReg2);
+                                }
+                            }
+                            // bottom left (jump case)
+                            if (row+1 < totalNum && 0 <= col-1 && row+2 < totalNum && 0 <= col-2){ 
+                                if ((dataPieces[row+1][col-1] == 1 || dataPieces[row+1][col-1] == 2) && dataPieces[row+2][col-2] == 0){
+                                    arrReg2 = [row, col, row+1, col-1, row+2, col-2, 'jump'];
+                                    condRegular2.push(arrReg2);
+                                }
+                            }
+                        }
+                        if (dataPieces[row][col] == -2){
+                            // Top right
+                            if (0 < row-1 && col+1 < totalNum){
+                                if (dataPieces[row-1][col+1] == 0){
+                                    arrReg2 = [row, col, 0, 0, row-1, col+1, 'regular'];
+                                    condRegular2.push(arrReg2);
+                                }    
+                            } 
+                            // Top left 
+                            if (0 <= row-1 && 0 <= col-1){          
+                                if (dataPieces[row-1][col-1] == 0){
+                                    arrReg2 = [row, col, 0, 0, row-1, col-1, 'regular'];
+                                    condRegular2.push(arrReg2);
+                                }
+                            }
+                            // Bottom right
+                            if (row+1 < totalNum && col+1 < totalNum){
+                                if (dataPieces[row+1][col+1] == 0){
+                                    arrReg2 = [row, col, 0, 0, row+1, col+1, 'regular'];
+                                    condRegular2.push(arrReg2);
+                                } 
+                            }
+                            // Bottom left  
+                            if (row+1 < totalNum && 0 <= col-1){             
+                                if (dataPieces[row+1][col-1] == 0){
+                                    arrReg2 = [row, col, 0, 0, row+1, col-1, 'regular'];
+                                    condRegular2.push(arrReg2);
+                                }
+                            }
+                            // Top right (jump case)
+                            if (0 <= row-1 && col+1 < totalNum && 0 <= row-2 && col+2 < totalNum){
+                                if ((dataPieces[row-1][col+1] == 1 || dataPieces[row-1][col+1] == 2) && dataPieces[row-2][col+2] == 0){
+                                    arrReg2 = [row, col, row-1, col+1, row-2, col+2, 'jump'];
+                                    condRegular2.push(arrReg2);
+                                }
+                            }
+                            // Top left (jump case)
+                            if (0 <= row-1 && 0 <= col-1 && 0 <= row-2 && 0 <= col-2){
+                                if((dataPieces[row-1][col-1] == 1 || dataPieces[row-1][col-1] == 2) && dataPieces[row-2][col-2] == 0){
+                                    arrReg2 = [row, col, row-1, col-1, row-2, col-2, 'jump'];
+                                    condRegular2.push(arrReg2);
+                                }
+                            }
+                            // Bottom right (jump case)
+                            if (row+1 < totalNum && col+1 < totalNum && row+2 < totalNum && col+2 < totalNum){
+                                if ((dataPieces[row+1][col+1] == 1 || dataPieces[row+1][col+1] == 2) && dataPieces[row+2][col+2] == 0){
+                                    arrReg2 = [row, col, row+1, col+1, row+2, col+2, 'jump'];
+                                    condRegular2.push(arrReg2);
+                                }
+                            }
+                            // Bottom left (jump case)
+                            if (row+1 < totalNum && 0 <= col-1 && row+2 < totalNum && 0 <= col-2){
+                                if((dataPieces[row+1][col-1] == 1 || dataPieces[row+1][col-1] == 2) && dataPieces[row+2][col-2] == 0){
+                                    arrReg2 = [row, col, row+1, col-1, row+2, col-2, 'jump'];
+                                    condRegular2.push(arrReg2);
+                                }
+                            }                            
+                        }
+                    }
+                }
+                if(condRegular2.length == 0){
+                    // player 2 lose if it doesn't have any place to move
+                    return "losePly2";
+                }
+            }
+            
+        }
+
         
-
-
         // coutn the number of rest of pieces
         function countRestPiece(){
             var countPiece1 = 0;
@@ -261,10 +505,13 @@ var selectedSize;
                     }
                 }
             }
-            document.getElementById("restPiece1").innerHTML = countPiece1;
-            document.getElementById("restPiece2").innerHTML = countPiece2;
+            document.getElementById("restPiece1").innerHTML = countPiece1;  // display the rest of player1's pieces
+            document.getElementById("restPiece2").innerHTML = countPiece2;  // display the rest of player1's pieces
+            
+            var restArr = [countPiece1, countPiece2];   // --> [restPiece_player1, restPiece_player2]
+            return restArr;
         }
-
+        
         var remNum  // set the remove index number
         // check the available places
         function isMoveAllowed(row_new,col_new){
@@ -718,10 +965,11 @@ var selectedSize;
                 }
             }
             
-            /*
-            else if (dataPieces[row][col] == 2) {
+            if (movCells.length == 0){
+                checkWinner();
+                //return;
             }
-            */
+
             //checkPromotion(row, currentPlayer, col);
             console.log("dataPieces",dataPieces);
             console.log("dataColor", dataColor);
