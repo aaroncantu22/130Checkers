@@ -20,6 +20,7 @@ var selectedSize;
         timerInterval = setInterval(updateTimer, 1000);
 
         currentPlayer = 'player1';
+        document.getElementById('displayTurn').innerHTML = currentPlayer +"'s Turn";
         console.log("chceck2", currentPlayer);
 
         gamePlayStart();
@@ -171,9 +172,9 @@ var selectedSize;
             }         
         }          
             
-        
+        var tbodyInd
         function movePieces(){
-            resetPiecesColors();    // rese pieces color
+            resetPiecesColors();    // reset pieces color
                 resetBoardColors();     // reset board color
                 clickedPiece.style.border = '4px solid white';
                 selectedPiece = clickedPiece;
@@ -182,10 +183,10 @@ var selectedSize;
                 rowNum = cell.parentElement.rowIndex; 
                 colNum = cell.cellIndex;
                 
-                var tbodyInd = document.querySelector('tbody');
+                tbodyInd = document.querySelector('tbody');
                     
                 //movCells = getMovalableCells(tbodyInd, rowNum, colNum, clickedPiece.classList);
-                getMovalableCells(tbodyInd, rowNum, colNum, clickedPiece.classList);
+                getMovalableCells(tbodyInd, rowNum, colNum);
 
                 var allPieces = document.querySelectorAll('.checker-piece');
                 allPieces.forEach(function (piece) {
@@ -217,6 +218,7 @@ var selectedSize;
             // check the selected pieces are included in avaliable place to move
             if (selectedPiece && isMoveAllowed(row_new,col_new) ){
                 var createPieces;
+                
                 if (currentPlayer === 'player1') {
                     createPieces = clilckedBoard.appendChild(selectedPiece);
                     currentPlayer = 'player2';  // switch the player's turn 
@@ -231,11 +233,36 @@ var selectedSize;
                 update_dataPieces(rowNum, colNum, row_new, col_new, clickedPiece.classList, createPieces); 
                 console.log ("num", row_new, col_new, createPieces);
                 resetBoardColors();
-                removeJumpedPiece(rowNum, colNum, row_new, col_new);
+                //removeJumpedPiece(rowNum, colNum, row_new, col_new);
+                removeJumpedPiece();
+                //checkDoubleJump(clickedPiece.classList, createPieces, row_new, col_new);
                 console.log("num: ", rowNum, colNum, row_new, col_new);
                 selectedPiece = null;
-                
+                countRestPiece();
+                document.getElementById('displayTurn').innerHTML = currentPlayer +"'s Turn";
             }
+        }
+
+        // check the condition of game (win, lose, or continue)
+        
+
+
+        // coutn the number of rest of pieces
+        function countRestPiece(){
+            var countPiece1 = 0;
+            var countPiece2 = 0;
+            for(let i=0;i<dataColor.sizeCells;i++){
+                for(let j=0;j<dataColor.sizeCells;j++){
+                    if (dataPieces[i][j] == 1 || dataPieces[i][j] == 2){
+                        countPiece1++;
+                    }
+                    if (dataPieces[i][j] == -1 || dataPieces[i][j] == -2){
+                        countPiece2++;
+                    }
+                }
+            }
+            document.getElementById("restPiece1").innerHTML = countPiece1;
+            document.getElementById("restPiece2").innerHTML = countPiece2;
         }
 
         var remNum  // set the remove index number
@@ -251,8 +278,7 @@ var selectedSize;
             return false;
         }
         
-        function removeJumpedPiece(rowStart, colStart, rowEnd, colEnd) {
-           
+        function removeJumpedPiece() {           
             remove = remCells[remNum];
             jumpedRow =remove[0];
             jumpedCol =remove[1];
@@ -265,6 +291,29 @@ var selectedSize;
             jumpedCell.innerHTML = '';
             dataPieces[jumpedRow][jumpedCol] = 0;
         }
+
+
+        /*
+        // check the double jump
+        function checkDoubleJump(clickTags, makePieces, roeNew, colNew){   
+            var tbodyInd = document.querySelector('tbody');         
+            getMovalableCells(tbodyInd, jumpedRow, jumpedCol);
+            //update_dataPieces(i, j, m, n, piecesTags, createPieces)
+            console.log("double arr:", movCells);
+            for(let i=0; i<movCells.length; i++){
+                var move = moveCells[i];
+                if(move[0] != 0 && move[1] != 0){
+                    console.log("double:", move);
+                    update_dataPieces(roeNew, colNew, move[0],move[1], clickTags, makePieces);
+                    resetBoardColors();
+                    removeJumpedPiece();
+                }
+                
+            }
+            
+        }
+        */
+        
 
 
 
@@ -288,6 +337,7 @@ var selectedSize;
                     createPieces.classList.add('king');
                 }
                 else {
+                    
                     dataPieces[m][n] = -1;
                 }
                 console.log('dataPieces:', dataPieces);
@@ -341,7 +391,7 @@ var selectedSize;
         
         
 
-        function getMovalableCells(tbodyInd, row, col, pieceTags){
+        function getMovalableCells(tbodyInd, row, col){
             movCells = [];   // move cells
             console.log("movCells", movCells);
             remCells = [];   // remove cells
