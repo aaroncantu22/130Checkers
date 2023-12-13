@@ -45,9 +45,7 @@ if ($conn->connect_error) {
     <meta charset="UTF-8">
     <title>Signup Result</title>
     <link rel="stylesheet" href="signSuccess.css" />
-    <style>
-       
-    </style>
+   
 </head>
 <body>
 
@@ -65,11 +63,12 @@ if ($conn->connect_error) {
         echo "<button id='back_to_signup_button' type='submit'>Back to Sign-up</button>";
         echo "</form>";
     } else {
+        echo "<div class='big-check'>&#10004;</div>";
         echo "<h2>Signup Successful</h2>";
         echo "<p>User added successfully!</p>";
 
         // Add the "Go to Login" button inside the text box
-        echo "<form action='login_Page.html' method='get'>";
+        echo "<form action= http://localhost/mysite/130Checkers/Login/login_Page.html method='get'>";
         echo "<button id='create_account_button' type='submit'>Go to Login</button>";
         echo "</form>";
     }
