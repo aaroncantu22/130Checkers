@@ -207,8 +207,7 @@ var selectedSize;
             clickB.addEventListener('click', boardClick);
         });
         
-        
-        //zvar gameOver = false;
+        var createPieces;
         // set the board click event
         function boardClick(event){
             var clilckedBoard = event.target;   // the clicked cell
@@ -218,7 +217,7 @@ var selectedSize;
             
             // check the selected pieces are included in avaliable place to move
             if (selectedPiece && isMoveAllowed(row_new,col_new) ){
-                var createPieces;
+                //var createPieces;
                 
                 if (currentPlayer === 'player1') {
                     createPieces = clilckedBoard.appendChild(selectedPiece);
@@ -235,11 +234,205 @@ var selectedSize;
                 console.log ("num", row_new, col_new, createPieces);
                 resetBoardColors();
                 //removeJumpedPiece(rowNum, colNum, row_new, col_new);
-                removeJumpedPiece();
+                var jump = removeJumpedPiece();
+                if (jump){
+                    checkDoubleJump(row_new, col_new);
+                    //console.log("checkJ:", checkJump, checkJump[0],checkJump[1]);
+                    /*
+                    while (checkJump != true){
+                        console.log("checkJ-2:",checkJump);
+                        checkJump = checkDoubleJump(checkJump[0], checkJump[1]);
+                        console.log("checkJ-3:", checkJump);
+                    }
+                    */
+                }                
                 //checkDoubleJump(clickedPiece.classList, createPieces, row_new, col_new);
                 console.log("num: ", rowNum, colNum, row_new, col_new);
                 selectedPiece = null;
                 checkWinner();
+            }
+        }
+
+        function update_JumpPieces(i,j,m,n){
+            /* --- add pieces --- */
+            var totalNum = dataColor.sizeCells;
+            if (currentPlayer == 'player2'){
+                //dataPieces[i][j] = 0;
+                if (m == 0 || dataPieces[i][j] == 2){
+                    dataPieces[m][n] = 2;                    
+                    var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
+                    newJumpPieces.classList.add('king');
+                    var createJumpPieces = document.querySelector('tbody').rows[m].cells[n];
+                    createJumpPieces.appendChild(newJumpPieces);
+                    
+                }
+                else {
+                    dataPieces[m][n] = 1;
+                    var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
+                    var createJumpPieces = document.querySelector('tbody').rows[m].cells[n];
+                    var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1')
+                    createJumpPieces.appendChild(newJumpPieces);
+                }                
+            }
+            else {
+                //dataPieces[i][j] = 0;
+                if (m == totalNum-1 || dataPieces[i][j] == -2){
+                    dataPieces[m][n] = -2;
+                    var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2');
+                    newJumpPieces.classList.add('king');
+                    var createJumpPieces = document.querySelector('tbody').rows[m].cells[n];
+                    createJumpPieces.appendChild(newJumpPieces);
+                }
+                else {
+                    dataPieces[m][n] = -1;
+                    var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2');
+                    var createJumpPieces = document.querySelector('tbody').rows[m].cells[n];
+                    var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2')
+                    createJumpPieces.appendChild(newJumpPieces);
+                }
+                console.log('dataPieces:', dataPieces);
+            } 
+            console.log('double pices:', dataPieces);
+        }
+
+        /*
+            --- explaination about each value ----
+            jump = jump case
+            regular = regular case
+            king = king case
+            arr = [removeRow, removeCol,currentRow, currentCol, destRow, destCol]
+            */
+
+        var dataJump;
+        // check the double jump
+        function checkDoubleJump(rowNew, colNew){     
+            var result = isAvailableDouble(rowNew,colNew); 
+            console.log("double Jump:", result);    
+            //update_dataPieces(i, j, m, n, piecesTags, createPieces)
+            if (result != "noJumpPly1" || result != "noJumpPly2"){
+                //var ele = dataJump[0];
+                //console.log("double Jump:", dataJump, "and", ele[0]);  
+                if (dataJump.length > 0){
+                    var i = 0;
+                    console.log("double Jump2:", dataJump[0][2], dataJump[0][3], dataJump[0][4],dataJump[0][5])
+                    //var newDest = [dataJump[i][4],dataJump[i][5]];
+                    setTimeout(function () {
+                        update_JumpPieces(dataJump[i][2], dataJump[i][3], dataJump[i][4],dataJump[i][5]);
+                        removeDoubleJump(dataJump[i][0], dataJump[i][1],dataJump[i][2], dataJump[i][3]);    
+                    }, 500);                   
+                    
+                    //return newDest;
+                }               
+                
+            }   
+        
+        }
+
+        function removeDoubleJump(remRow, remCol, remRow2, remCol2) {           
+            console.log("remDouble:", remRow, remCol, remRow2, remCol2);
+            // get the cell information after jumping
+            var removeDouble1 = document.querySelector('tbody').rows[remRow].cells[remCol];
+            // delete cells jumped by opponents
+            removeDouble1.innerHTML = '';
+            dataPieces[remRow][remCol] = 0;
+            
+            var removeDouble2 = document.querySelector('tbody').rows[remRow2].cells[remCol2];
+            // delete cells jumped by opponents
+            removeDouble2.innerHTML = '';
+            dataPieces[remRow2][remCol2] = 0;            
+        }
+
+        function isAvailableDouble(row, col){
+            let totalNum = dataColor.sizeCells;
+            var arrJump;
+            dataJump = [];
+            if(currentPlayer == "player2"){
+                // check player1 can't move (check doubl jump )
+                // regular case
+                if (dataPieces[row][col] == 1){
+                    // top right (jump case)
+                    if (0 <= row-1 && col+1 < totalNum && 0 <= row-2 && col+2 < totalNum){  
+                        if ((dataPieces[row-1][col+1] == -1 || dataPieces[row-1][col+1] == -2) && dataPieces[row-2][col+2] == 0){
+                            arrJump = [row, col, row-1, col+1, row-2, col+2];
+                            dataJump.push(arrJump);
+                        }
+                    }
+                    // top left (jump case)
+                    if (0 <= row-1 && 0 <= col-1 && 0 <= row-2 && 0 <= col-2){  
+                        if((dataPieces[row-1][col-1] == -1 || dataPieces[row-1][col-1] == -2) && dataPieces[row-2][col-2] == 0){
+                            arrJump = [row, col, row-1, col-1, row-2, col-2];
+                            dataJump.push(arrJump);
+                        }
+                    }
+                }
+                // king pieces case
+                else if (dataPieces[row][col] == 2){
+                    // Bottom right (jump case)
+                    if (0 <= row+1 && 0 <= col+1 && 0 <= row+2 && 0 <= col+2){
+                        if ((dataPieces[row+1][col+1] == -1 || dataPieces[row+1][col+1] == -2) && dataPieces[row+2][col+2] == 0){
+                            arrJump = [row, col, row+1, col+1, row+2, col+2];
+                            dataJump.push(arrJump);
+                        }
+                    }
+                    // Bottom left (jump case)
+                    if (row+1 < totalNum && 0 <= col-1 && row+2 < totalNum && 0 <= col-2){
+                        if((dataPieces[row+1][col-1] == -1 || dataPieces[row+1][col-1] == -2) && dataPieces[row+2][col-2] == 0){
+                            arrJump = [row, col, row+1, col-1, row+2, col-2];
+                            dataJump.push(arrJump);
+                        }
+                    }    
+                }     
+                if(dataJump.length == 0){
+                    // player 1 lose if it doesn't have any place to move
+                    return "noJumpPly1";
+                }
+                else{
+                    return "doubleJump";
+                }
+            }
+            else{
+                // check player2 can't move
+                // regular pieces case
+                if (dataPieces[row][col] == -1 || dataPieces[row][col] == -2){ 
+                    // bottom right (jump case)  
+                    if (row+1 < totalNum && col+1 < totalNum && row+2 < totalNum && col+2 < totalNum){                           
+                        if ((dataPieces[row+1][col+1] == 1 || dataPieces[row+1][col+1] == 2) && dataPieces[row+2][col+2] == 0){
+                            arrJump = [row, col, row+1, col+1, row+2, col+2];
+                            dataJump.push(arrJump);
+                        }
+                    }            
+                    // bottom left (jump case)
+                    if (row+1 < totalNum && 0 <= col-1 && row+2 < totalNum && 0 <= col-2){ 
+                        if ((dataPieces[row+1][col-1] == 1 || dataPieces[row+1][col-1] == 2) && dataPieces[row+2][col-2] == 0){
+                            arrJump = [row, col, row+1, col-1, row+2, col-2];
+                            dataJump.push(arrJump);
+                        }
+                    }
+                }            
+                // king pieces case
+                if (dataPieces[row][col] == -2){       
+                    // Top right (jump case)
+                    if (0 <= row-1 && col+1 < totalNum && 0 <= row-2 && col+2 < totalNum){
+                        if ((dataPieces[row-1][col+1] == 1 || dataPieces[row-1][col+1] == 2) && dataPieces[row-2][col+2] == 0){
+                            arrJump = [row, col, row-1, col+1, row-2, col+2];
+                            dataJump.push(arrJump);
+                        }
+                    }        
+                    // Top left (jump case)
+                    if (0 <= row-1 && 0 <= col-1 && 0 <= row-2 && 0 <= col-2){
+                        if((dataPieces[row-1][col-1] == 1 || dataPieces[row-1][col-1] == 2) && dataPieces[row-2][col-2] == 0){
+                            arrReg2 = [row, col, row-1, col-1, row-2, col-2];
+                            dataJump.push(arrJump);
+                        }
+                    }                                 
+                }                   
+                if(dataJump.length == 0){
+                    // player 2 lose if it doesn't have any place to move
+                    return "noJumpPly2";
+                }
+                else{
+                    return "doubleJump";
+                }
             }
         }
 
@@ -385,8 +578,7 @@ var selectedSize;
                 if(condRegular1.length == 0){
                     // player 1 lose if it doesn't have any place to move
                     return "losePly1";
-                }   
-                console.log("condReg1:None");                           
+                }
             }
             else{
                 // check player2 can't move
@@ -524,44 +716,26 @@ var selectedSize;
             }
             return false;
         }
-        
+
         function removeJumpedPiece() {           
             remove = remCells[remNum];
             jumpedRow =remove[0];
             jumpedCol =remove[1];
 
-            console.log("ans:", remNum, remove, jumpedRow, jumpedCol);
-            // get the cell information after jumping
-            jumpedCell = document.querySelector('tbody').rows[jumpedRow].cells[jumpedCol];
+            if (jumpedRow == 0 && jumpedCol == 0){
+                return false;
+            }
+            else {
+                // get the cell information after jumping
+                jumpedCell = document.querySelector('tbody').rows[jumpedRow].cells[jumpedCol];
 
-            // delete cells jumped by opponents
-            jumpedCell.innerHTML = '';
-            dataPieces[jumpedRow][jumpedCol] = 0;
-        }
-
-
-        /*
-        // check the double jump
-        function checkDoubleJump(clickTags, makePieces, roeNew, colNew){   
-            var tbodyInd = document.querySelector('tbody');         
-            getMovalableCells(tbodyInd, jumpedRow, jumpedCol);
-            //update_dataPieces(i, j, m, n, piecesTags, createPieces)
-            console.log("double arr:", movCells);
-            for(let i=0; i<movCells.length; i++){
-                var move = moveCells[i];
-                if(move[0] != 0 && move[1] != 0){
-                    console.log("double:", move);
-                    update_dataPieces(roeNew, colNew, move[0],move[1], clickTags, makePieces);
-                    resetBoardColors();
-                    removeJumpedPiece();
-                }
-                
+                // delete cells jumped by opponents
+                jumpedCell.innerHTML = '';
+                dataPieces[jumpedRow][jumpedCol] = 0;
+                return true;
             }
             
         }
-        */
-        
-
 
 
         function update_dataPieces(i, j, m, n, piecesTags, createPieces){
@@ -575,7 +749,6 @@ var selectedSize;
                 else {
                     dataPieces[m][n] = 1;
                 }                
-                console.log('dataPieces1:', dataPieces);
             }
             else {
                 //dataPieces[i][j] = 0;
@@ -584,10 +757,8 @@ var selectedSize;
                     createPieces.classList.add('king');
                 }
                 else {
-                    
                     dataPieces[m][n] = -1;
                 }
-                console.log('dataPieces:', dataPieces);
             } 
             dataPieces[i][j] = 0;
         }
@@ -610,9 +781,7 @@ var selectedSize;
                 } else if (dataBoard[row][col] == 1) {
                     cell.style.backgroundColor = dataColor.board_data2;
                 }
-                                  
                 });
-
         }
 
         function getContainingCell(piece) {
@@ -620,7 +789,6 @@ var selectedSize;
                 return piece;
             }
             return piece.parentElement;
-            
         }    
         
         // check the condition to be a king
@@ -635,7 +803,6 @@ var selectedSize;
         function promoteToKing(piece, currentPlayer, row, col) {
             piece.classList.add('king');            
         }
-        
         
 
         function getMovalableCells(tbodyInd, row, col){
@@ -967,7 +1134,6 @@ var selectedSize;
             
             if (movCells.length == 0){
                 checkWinner();
-                //return;
             }
 
             //checkPromotion(row, currentPlayer, col);
