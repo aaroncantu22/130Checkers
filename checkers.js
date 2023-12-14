@@ -54,6 +54,7 @@ var selectedSize;
         dataPieces = JSON.parse(localStorage.getItem('dataPieces'));
     }
 
+    var timerDisplay
     /* count Time */
     function updateTimer() {
         var now = new Date();
@@ -67,7 +68,7 @@ var selectedSize;
         minutes = minutes < 10 ? '0' + minutes : minutes;
         seconds = seconds < 10 ? '0' + seconds : seconds;
 
-        var timerDisplay = hours + ':' + minutes + ':' + seconds;
+        timerDisplay = hours + ':' + minutes + ':' + seconds;
         document.getElementById('playTime').innerHTML = timerDisplay;
     }
 
@@ -288,12 +289,12 @@ function gamePlayStart(){
                 }
             }
         }
-
+        var checkWin = false;
         var condRegular2
         /* Computer Side */
         function CPU(){
-            setTimeout(function () {
-                   
+            //if(checkWin == true){
+            setTimeout(function () {                   
             
             checkCondition();
             console.log("comp", condRegular2);
@@ -360,11 +361,12 @@ function gamePlayStart(){
             //var createPieces = clilckedBoard.appendChild(tableCPU);
             //update_dataPieces(select[0], select[1], select[4], select[5], tableCPU.classList, createPieces); 
             currentPlayer = "player1";
-            checkWinner();
+            checkWin = checkWinner();
             }
         }, 500);  
-                        
+                  
         }
+        
 
 
         function checkCondition(){
@@ -663,6 +665,7 @@ function gamePlayStart(){
         
 
         // check the condition of game (win, lose, or continue)
+        var playingTime;
         function checkWinner(){
             var countPiece = countRestPiece();
             var gameStatus = gameOver();
@@ -670,18 +673,25 @@ function gamePlayStart(){
             if(countPiece[1] == 0){
                 // player 1 Wins (delete all player2's pieces)
                 document.getElementById("displayTurn").innerHTML = "Player1 Wins &#129395";
+                console.log("time: ", timerDisplay);
+                playingTime = timerDisplay;
+
             }
             else if (countPiece[0] == 0){
                 // player 2 wins    (delete all player1's pieces)
                 document.getElementById("displayTurn").innerHTML = "Player2 Wins &#129321";
+                console.log("time: ", timerDisplay);
+                playingTime = timerDisplay;
             }
             else if (gameStatus == "losePly2"){
                 // player 1 Wins (no more move)
                 document.getElementById("displayTurn").innerHTML = "Player1 Wins &#129395";
+                playingTime = timerDisplay;
             }
             else if (gameStatus == "losePly1"){
                 // player 2 wins (no more move)
                 document.getElementById("displayTurn").innerHTML = "Player2 Wins &#129321";
+                playingTime = timerDisplay;
             }
             else {
                 // continue game
