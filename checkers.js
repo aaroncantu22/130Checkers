@@ -262,6 +262,7 @@ var selectedSize;
                     dataPieces[m][n] = 2;                    
                     var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
                     newJumpPieces.classList.add('king');
+                    newJumpPieces.addEventListener('click', handlePieceClick);
                     var createJumpPieces = document.querySelector('tbody').rows[m].cells[n];
                     createJumpPieces.appendChild(newJumpPieces);
                     
@@ -269,6 +270,7 @@ var selectedSize;
                 else {
                     dataPieces[m][n] = 1;
                     var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1');
+                    newJumpPieces.addEventListener('click', handlePieceClick);
                     var createJumpPieces = document.querySelector('tbody').rows[m].cells[n];
                     var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply1'), 'player1')
                     createJumpPieces.appendChild(newJumpPieces);
@@ -279,6 +281,7 @@ var selectedSize;
                 if (m == totalNum-1 || dataPieces[i][j] == -2){
                     dataPieces[m][n] = -2;
                     var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2');
+                    newJumpPieces.addEventListener('click', handlePieceClick);
                     newJumpPieces.classList.add('king');
                     var createJumpPieces = document.querySelector('tbody').rows[m].cells[n];
                     createJumpPieces.appendChild(newJumpPieces);
@@ -286,6 +289,7 @@ var selectedSize;
                 else {
                     dataPieces[m][n] = -1;
                     var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2');
+                    newJumpPieces.addEventListener('click', handlePieceClick);
                     var createJumpPieces = document.querySelector('tbody').rows[m].cells[n];
                     var newJumpPieces = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2')
                     createJumpPieces.appendChild(newJumpPieces);
@@ -306,15 +310,15 @@ var selectedSize;
         var dataJump;
         // check the double jump
         function checkDoubleJump(rowNew, colNew){     
-            var result = isAvailableDouble(rowNew,colNew); 
+            var result  = isAvailableDouble(rowNew,colNew); 
             console.log("double Jump:", result);    
             //update_dataPieces(i, j, m, n, piecesTags, createPieces)
             if (result != "noJumpPly1" || result != "noJumpPly2"){
                 //var ele = dataJump[0];
-                //console.log("double Jump:", dataJump, "and", ele[0]);  
-                if (dataJump.length > 0){
+                //console.log("double Jump:", dataJump, "and", ele[0], and, dataJump.length);  
+                if (dataJump.length != 0){
                     var i = 0;
-                    console.log("double Jump2:", dataJump[0][2], dataJump[0][3], dataJump[0][4],dataJump[0][5])
+                    console.log("double Jump2:", dataJump[i][2], dataJump[i][3], dataJump[i][4],dataJump[i][5])
                     //var newDest = [dataJump[i][4],dataJump[i][5]];
                     setTimeout(function () {
                         update_JumpPieces(dataJump[i][2], dataJump[i][3], dataJump[i][4],dataJump[i][5]);
