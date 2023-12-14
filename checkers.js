@@ -33,6 +33,25 @@ var selectedSize;
 
         // Reset the game started flag and disable hover event listeners
         gameStarted = false;
+        resetCheckers();
+        
+    }
+
+    function resetCheckers() {
+        var cells = document.querySelectorAll('td');
+    
+        
+        cells.forEach(function (cell) {
+            cell.innerHTML = '';
+        });
+
+        if (selectedSize === '8x8'){    // dataColor.sizeCells == 8 
+            placeCheckerPieces8x8();
+        }
+        else{
+            placeCheckerPieces10x10();
+        }
+        dataPieces = JSON.parse(localStorage.getItem('dataPieces'));
     }
 
     /* count Time */
@@ -118,10 +137,8 @@ var selectedSize;
     }
 
 
-
-
     /* Action of pieces */
-// function gamePlayStart(){
+function gamePlayStart(){
         
         var pieces = document.querySelectorAll('.checker-piece');   
         var dataPieces = JSON.parse(localStorage.getItem('dataPieces'));
@@ -133,7 +150,6 @@ var selectedSize;
             piece.addEventListener('click', handlePieceClick);
         });
                        
-
         var cell
         var rowNum;     // set current row
         var colNum;     // set current column
@@ -154,6 +170,7 @@ var selectedSize;
         var jumpedCell;
 
                 
+        var donePly1 = false;
         // handle after clicking pieces
         function handlePieceClick(event) {
             if (currentPlayer === 'player1') {
@@ -161,17 +178,20 @@ var selectedSize;
                 if (clickedPiece.classList.contains('player1')){
                     movePieces();
                     //checkPromotion(rowNum, currentPlayer, colNum);
+                    
                 }     
             }   
-            else if (currentPlayer === 'player2')   {
-                clickedPiece = event.target;
-                if (clickedPiece.classList.contains('player2')){
-                    movePieces();
-                    //checkPromotion(rowNum, currentPlayer, colNum);
-                } 
-            }         
-        }          
-            
+            else if (currentPlayer === 'player2') {                
+                    clickedPiece = event.target;
+                    if (clickedPiece.classList.contains('player2')){
+                        movePieces();
+                        //checkPromotion(rowNum, currentPlayer, colNum);
+                    } 
+                
+                
+            }        
+        }
+        
         var tbodyInd
         function movePieces(){
             resetPiecesColors();    // reset pieces color
@@ -208,9 +228,10 @@ var selectedSize;
         });
         
         var createPieces;
+        var clilckedBoard
         // set the board click event
         function boardClick(event){
-            var clilckedBoard = event.target;   // the clicked cell
+            clilckedBoard = event.target;   // the clicked cell
             cell = getContainingCell(clilckedBoard);    // get the clicked cell information
             row_new = cell.parentElement.rowIndex;      // get the clicked cell of row 
             col_new = cell.cellIndex;                   // get the clicked cell of column
@@ -252,10 +273,198 @@ var selectedSize;
                 console.log("num: ", rowNum, colNum, row_new, col_new);
                 selectedPiece = null;
                 checkWinner();
+                donePly1 = true;
+
+                if(donePly1 && dataColor.numPlayer == '1ply'){
+                    //currentPlayer === 'player1';
+                    //currentPlayer === 'player2';
+                    console.log("currPly", currentPlayer);
+                    CPU();
+                    //checkWinner();
+                    donePly1 = false;
+                    //currentPlayer = 'player1';
+                    console.log("currPly", currentPlayer);
+                    //return;
+                }
             }
         }
 
-        
+        var condRegular2
+        /* Computer Side */
+        function CPU(){
+            setTimeout(function () {
+                   
+            
+            checkCondition();
+            console.log("comp", condRegular2);
+            //  [curRow, curCol, remRow, remCol, destRow, destCol, status] --> [2, 7, 0, 0, 3, 6, 'regular']
+            var arrCPU = [];
+            var select;
+            for(let i=0; i<condRegular2.length; i++){
+                if(condRegular2[i][6] == 'jump'){
+                    arrCPU.push(condRegular2[i]);                                        
+                }
+            }
+            console.log(arrCPU);
+            if (arrCPU.length > 1){
+                let index = Math.floor(Math.random() * arrCPU.length);
+                select = arrCPU[index];
+            }
+            else if (arrCPU.length == 1){
+                select = arrCPU[0];
+            }
+            else {
+                let index = Math.floor(Math.random() * condRegular2.length);
+                select = condRegular2[index];
+            }
+            //console.log(select[0]);
+            var totalNum = dataColor.sizeCells;
+            // isMoveAllowed(row_new,col_new)
+            var tbody = document.querySelector('tbody');
+            var tableCPU = document.querySelector('tbody').rows[select[4]].cells[select[5]];
+            getMovalableCells(tbody, select[0], select[1]);
+            var statusCPU = isMoveAllowed(select[4],select[5]);
+            resetBoardColors();
+            console.log(tableCPU);
+            var checkerPiece = createCheckerPiece(localStorage.getItem('colorPieces_ply2'), 'player2');
+            if (statusCPU){
+            tableCPU.appendChild(checkerPiece);
+            
+
+            if (dataPieces[select[0]][select[1]] == -1){
+                if(select[4] == totalNum-1){
+                    dataPieces[select[4]][select[5]] = -2;
+                    checkerPiece.classList.add('king');
+                }
+                else{
+                    dataPieces[select[4]][select[5]] = -1;
+                }                
+            }
+            else if (dataPieces[select[0]][select[1]] == -2){
+                dataPieces[select[4]][select[5]] = -2;
+                checkerPiece.classList.add('king');
+            }
+
+            if(select[6] == 'jump'){
+                var removeJump = document.querySelector('tbody').rows[select[2]].cells[select[3]];
+                removeJump.innerHTML = '';
+                dataPieces[select[2]][select[3]] = 0;                
+            }
+            
+            var removeCPU = document.querySelector('tbody').rows[select[0]].cells[select[1]];
+            // delete cells jumped by opponents
+            removeCPU.innerHTML = '';
+            dataPieces[select[0]][select[1]] = 0;
+            
+            //console.log("selected CPU:", select, "and", tableCPU.classList);            
+            //var createPieces = clilckedBoard.appendChild(tableCPU);
+            //update_dataPieces(select[0], select[1], select[4], select[5], tableCPU.classList, createPieces); 
+            currentPlayer = "player1";
+            checkWinner();
+            }
+        }, 500);  
+                        
+        }
+
+
+        function checkCondition(){
+            var totalNum = dataColor.sizeCells;
+            var arrReg2;
+            condRegular2 = [];
+            for(let row=0;row<dataColor.sizeCells;row++){
+                for(let col=0;col<dataColor.sizeCells;col++){
+                    if (dataPieces[row][col] == -1){
+                        // bottom right
+                        if (row+1 < totalNum && col+1 < totalNum){
+                            if (dataPieces[row+1][col+1] == 0){
+                                arrReg2 = [row, col, 0, 0, row+1, col+1, 'regular'];
+                                condRegular2.push(arrReg2);
+                            }
+                        }
+                        // bottom left
+                        if (row+1 < totalNum && 0 <= col-1){                                
+                            if (dataPieces[row+1][col-1] == 0){
+                                arrReg2 = [row, col, 0, 0, row+1, col-1, 'regular'];
+                                condRegular2.push(arrReg2);
+                            } 
+                        }  
+                        // bottom right (jump case)  
+                        if (row+1 < totalNum && col+1 < totalNum && row+2 < totalNum && col+2 < totalNum){                           
+                            if ((dataPieces[row+1][col+1] == 1 || dataPieces[row+1][col+1] == 2) && dataPieces[row+2][col+2] == 0){
+                                arrReg2 = [row, col, row+1, col+1, row+2, col+2, 'jump'];
+                                condRegular2.push(arrReg2);
+                            }
+                        }
+                        // bottom left (jump case)
+                        if (row+1 < totalNum && 0 <= col-1 && row+2 < totalNum && 0 <= col-2){ 
+                            if ((dataPieces[row+1][col-1] == 1 || dataPieces[row+1][col-1] == 2) && dataPieces[row+2][col-2] == 0){
+                                arrReg2 = [row, col, row+1, col-1, row+2, col-2, 'jump'];
+                                condRegular2.push(arrReg2);
+                            }
+                        }
+                    }
+                    if (dataPieces[row][col] == -2){
+                        // Top right
+                        if (0 < row-1 && col+1 < totalNum){
+                            if (dataPieces[row-1][col+1] == 0){
+                                arrReg2 = [row, col, 0, 0, row-1, col+1, 'regular'];
+                                condRegular2.push(arrReg2);
+                            }    
+                        } 
+                        // Top left 
+                        if (0 <= row-1 && 0 <= col-1){          
+                            if (dataPieces[row-1][col-1] == 0){
+                                arrReg2 = [row, col, 0, 0, row-1, col-1, 'regular'];
+                                condRegular2.push(arrReg2);
+                            }
+                        }
+                        // Bottom right
+                        if (row+1 < totalNum && col+1 < totalNum){
+                            if (dataPieces[row+1][col+1] == 0){
+                                arrReg2 = [row, col, 0, 0, row+1, col+1, 'regular'];
+                                condRegular2.push(arrReg2);
+                            } 
+                        }
+                        // Bottom left  
+                        if (row+1 < totalNum && 0 <= col-1){             
+                            if (dataPieces[row+1][col-1] == 0){
+                                arrReg2 = [row, col, 0, 0, row+1, col-1, 'regular'];
+                                condRegular2.push(arrReg2);
+                            }
+                        }
+                        // Top right (jump case)
+                        if (0 <= row-1 && col+1 < totalNum && 0 <= row-2 && col+2 < totalNum){
+                            if ((dataPieces[row-1][col+1] == 1 || dataPieces[row-1][col+1] == 2) && dataPieces[row-2][col+2] == 0){
+                                arrReg2 = [row, col, row-1, col+1, row-2, col+2, 'jump'];
+                                condRegular2.push(arrReg2);
+                            }
+                        }
+                        // Top left (jump case)
+                        if (0 <= row-1 && 0 <= col-1 && 0 <= row-2 && 0 <= col-2){
+                            if((dataPieces[row-1][col-1] == 1 || dataPieces[row-1][col-1] == 2) && dataPieces[row-2][col-2] == 0){
+                                arrReg2 = [row, col, row-1, col-1, row-2, col-2, 'jump'];
+                                condRegular2.push(arrReg2);
+                            }
+                        }
+                        // Bottom right (jump case)
+                        if (row+1 < totalNum && col+1 < totalNum && row+2 < totalNum && col+2 < totalNum){
+                            if ((dataPieces[row+1][col+1] == 1 || dataPieces[row+1][col+1] == 2) && dataPieces[row+2][col+2] == 0){
+                                arrReg2 = [row, col, row+1, col+1, row+2, col+2, 'jump'];
+                                condRegular2.push(arrReg2);
+                            }
+                        }
+                        // Bottom left (jump case)
+                        if (row+1 < totalNum && 0 <= col-1 && row+2 < totalNum && 0 <= col-2){
+                            if((dataPieces[row+1][col-1] == 1 || dataPieces[row+1][col-1] == 2) && dataPieces[row+2][col-2] == 0){
+                                arrReg2 = [row, col, row+1, col-1, row+2, col-2, 'jump'];
+                                condRegular2.push(arrReg2);
+                            }
+                        }                            
+                    }
+                }
+            }
+                
+        }
         
         function update_JumpPieces(i,j,m,n){
             /* --- add pieces --- */
@@ -303,7 +512,6 @@ var selectedSize;
             console.log('double pices:', dataPieces);
         }
         
-
         /*
             --- explaination about each value ----
             jump = jump case
@@ -695,6 +903,9 @@ var selectedSize;
                 if(condRegular2.length == 0){
                     // player 2 lose if it doesn't have any place to move
                     return "losePly2";
+                }
+                if (dataColor.numPlayer == '2ply'){
+                    return condRegular2;
                 }
             }
             
@@ -1161,4 +1372,4 @@ var selectedSize;
             console.log("movCells2", movCells);
             return movCells;            
         }
-    //}
+    }
