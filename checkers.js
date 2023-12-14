@@ -234,18 +234,20 @@ var selectedSize;
                 console.log ("num", row_new, col_new, createPieces);
                 resetBoardColors();
                 //removeJumpedPiece(rowNum, colNum, row_new, col_new);
-                var jump = removeJumpedPiece();
+                removeJumpedPiece();
+                /*
                 if (jump){
                     checkDoubleJump(row_new, col_new);
                     //console.log("checkJ:", checkJump, checkJump[0],checkJump[1]);
-                    /*
+                    
                     while (checkJump != true){
                         console.log("checkJ-2:",checkJump);
                         checkJump = checkDoubleJump(checkJump[0], checkJump[1]);
                         console.log("checkJ-3:", checkJump);
                     }
-                    */
-                }                
+                    
+                }       
+                */         
                 //checkDoubleJump(clickedPiece.classList, createPieces, row_new, col_new);
                 console.log("num: ", rowNum, colNum, row_new, col_new);
                 selectedPiece = null;
@@ -253,6 +255,8 @@ var selectedSize;
             }
         }
 
+        
+        
         function update_JumpPieces(i,j,m,n){
             /* --- add pieces --- */
             var totalNum = dataColor.sizeCells;
@@ -298,6 +302,7 @@ var selectedSize;
             } 
             console.log('double pices:', dataPieces);
         }
+        
 
         /*
             --- explaination about each value ----
@@ -307,6 +312,8 @@ var selectedSize;
             arr = [removeRow, removeCol,currentRow, currentCol, destRow, destCol]
             */
 
+            
+            /*
         var dataJump;
         // check the double jump
         function checkDoubleJump(rowNew, colNew){     
@@ -331,7 +338,10 @@ var selectedSize;
             }   
         
         }
+        */
+        
 
+        /*
         function removeDoubleJump(remRow, remCol, remRow2, remCol2) {           
             console.log("remDouble:", remRow, remCol, remRow2, remCol2);
             // get the cell information after jumping
@@ -345,7 +355,9 @@ var selectedSize;
             removeDouble2.innerHTML = '';
             dataPieces[remRow2][remCol2] = 0;            
         }
+        */
 
+        /*
         function isAvailableDouble(row, col){
             let totalNum = dataColor.sizeCells;
             var arrJump;
@@ -439,6 +451,8 @@ var selectedSize;
                 }
             }
         }
+        */
+        
 
         // check the condition of game (win, lose, or continue)
         function checkWinner(){
