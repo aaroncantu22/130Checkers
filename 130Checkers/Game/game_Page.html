@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Game Page</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="checkers_Game.css">
+    <style>
+        /* --- Checker Board --- */
+        table {
+            border-collapse: collapse;
+            border: 10px solid rgb(182, 182, 182);
+            margin: auto; /* set the board at the center */
+        }
+
+        td, tr {
+            border: solid rgb(76, 75, 75); /* Add this line to set the border for cells and rows */
+            width: 60px;
+            height: 60px;
+        }
+
+        #board_position {
+            /* set the board on the center */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .restPiece {
+            font-size: 20px;
+        }
+
+        /* --- Timer and Button --- */
+        #timer_position {
+            /* set the position of timer and button */
+            margin-left: -15em;
+            margin-right: 5em;
+            margin-bottom: 5em;
+        }
+
+        #playTime, #displayTurn {
+            /* set the size of timer*/
+            font-size: 30px;
+        }
+
+        /* Checker Pieces */
+        .checker-piece {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 5px;
+        }
+
+        /* King pieces */
+        .checker-piece.king {
+            background-color: gold; 
+            box-shadow: 0 0 10px gold; 
+
+        }
+    </style>
+
+</head>
+<body>
+<!-- Fresno state logo and Title -->
+<!-- set CSS in "checkers.css" -->
+<div id="logo">
+    <img class="bulldogs" id="logo1" src="bulldogs.jpg" alt="Fresno State Bulldogs">
+    <article>
+        <header>
+            <h1>Checkers</h1>
+        </header>
+    </article>
+    <img class="bulldogs" id="logo2" src="bulldogs.jpg" alt="Fresno State Bulldogs">
+</div>
+
+<br>
+<!-- Go back to Home Page -->
+<!-- set CSS in "checkers.css" -->
+<button class="backPage" type="button" onclick="location.href = '/mysite/130Checkers/Game/index_Page.html'">GO BACK</button>
+<br>
+<br>
+
+<div id="board_position">
+    <div id="timer_position">
+        <div>
+            <!-- Start game and timer -->
+            <button id="startGame" type="button" onclick="startGame()">Start Game</button>
+            <!-- Reset game and timer -->
+            <button id="restartGame" type="button" onclick="restartGame()">Restart Game</button>
+        </div>
+        <br>
+        <!-- display time -->
+        <div id="playTime">00:00:00</div>
+        <br> <br> <br>
+        <!-- display player's turn and result -->
+        <div id="displayTurn">Welcome!</div>
+        <br>
+        <div class = "restPiece">
+            Player 1: <span id = "restPiece1"> </span>
+        </div>
+        <div class = "restPiece">
+            Player 2: <span id = "restPiece2"></span>
+        </div>
+    </div>
+    <br> <br>
+    <!-- Checker board -->
+    <div>
+        <table id="board"></table>
+    </div>
+    <!-- Checker Pieces-->
+    <section id="checkerPiece"></section>
+</div>
+
+<br>
+<br>
+<script src="./checkers.js"></script>
+
+</body>
+
+
+</html>

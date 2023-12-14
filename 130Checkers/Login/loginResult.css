@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background-color: #000000;
+    color: #000080;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+}
+
+.result-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #a90000;
+    border-radius: 50px 5px; /* Apply similar border-radius */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    margin-top: 70px;
+
+    /* Apply similar height-related styles */
+    width: 400px;
+    height: 470px;
+    max-width: 400px;
+    max-height: 470px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Add the login_form_container styles for consistency */
+.result-container::before,
+.result-container::after {
+    content: '';
+    position: absolute;
+    width: 170%;
+    height: 170%;
+    animation: rotate_border 6s linear infinite;
+}
+
+.result-container::before {
+    background-image: conic-gradient(transparent, transparent, transparent, #000080); /* Navy blue */
+}
+
+.result-container::after {
+    background-image: conic-gradient(transparent, transparent, transparent, #ffffff); /* White */
+    animation-delay: -3s;
+}
+
+.error-message {
+    color: #ffffff;
+    font-size: 18px;
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-in-out; /* Add fadeIn animation */
+}
+
+.back-to-login {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000080;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.back-to-login:hover {
+    background-color: #000066;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes rotate_border {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.result {
+    position: absolute;
+    content: '';
+    background-color: #a90000; /* Red background */
+    border-radius: 50px 5px;
+    inset: 5px;
+    padding: 20px 40px;
+    z-index: 10;
+    color: white; /* Navy blue text color */
+
+}
+
+.big-x {
+    font-size: 5em;
+    color: white;
+    text-align: center;
+    font-family: 'Comic Sans MS', cursive;
+    animation: heartbeat 1s infinite;
+    margin-bottom: 40px;
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

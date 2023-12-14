@@ -1,0 +1,58 @@
+/* leaderboard.css */
+
+body {
+    background-color: #f2e7d9; /* Light beige background */
+    font-family: 'Arial', sans-serif;
+}
+
+#logo {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.bulldogs {
+    width: 100px;
+    height: 100px;
+}
+
+h1 {
+    color: #4d2a0b; /* Dark brown header text */
+}
+
+.backPage {
+    background-color: #4d2a0b; /* Dark brown button background */
+    color: #f2e7d9; /* Light beige button text */
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+#leaderboardTable {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #f2e7d9; /* Light beige table background */
+}
+
+#leaderboardTable th, #leaderboardTable td {
+    border: 1px solid #4d2a0b; /* Dark brown table borders */
+    padding: 10px;
+    text-align: center;
+}
+
+#leaderboardTable th {
+    background-color: #4d2a0b; /* Dark brown header background */
+    color: #f2e7d9; /* Light beige header text */
+}
+
+#leaderboardTable tbody tr:nth-child(even) {
+    background-color: #e4d2b5; /* Light brown alternate row background */
+}
+
+#leaderboardTable tbody tr:hover {
+    background-color: #a37747; /* Darker brown hover effect */
+    color: #f2e7d9; /* Light beige text on hover */
+}
