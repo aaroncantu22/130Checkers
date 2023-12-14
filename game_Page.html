@@ -27,6 +27,10 @@
 
         }
 
+        .restPiece {
+            font-size: 20px;
+        }
+
         /* --- Timer and Button --- */
         #timer_position {
             /* set the position of timer and button */
@@ -48,10 +52,11 @@
             margin: 5px;
         }
 
-        /* King Pieces */
+        /* King pieces */
         .checker-piece.king {
             background-color: gold; 
-            box-shadow: 0 0 10px gold;
+            box-shadow: 0 0 10px gold; 
+
         }
     </style>
 
@@ -90,6 +95,13 @@
         <br> <br> <br>
         <!-- display player's turn and result -->
         <div id="displayTurn">Welcome!</div>
+        <br>
+        <div class = "restPiece">
+            Player 1: <span id = "restPiece1"> </span>
+        </div>
+        <div class = "restPiece">
+            Player 2: <span id = "restPiece2"></span>
+        </div>
     </div>
     <br> <br>
     <!-- Checker board -->
@@ -102,8 +114,9 @@
 
 <br>
 <br>
+<script src="./checkers.js"></script>
 
 </body>
-<script src="./checkers.js"></script>
+
 
 </html>
